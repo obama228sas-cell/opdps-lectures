@@ -69,8 +69,8 @@ body{
   color:#f4ead2; margin:0 0 26px; font-weight:400;}
 .slide h2::after{content:''; display:block; width:90px; height:3px; background:var(--gold); margin-top:18px;}
 p.lead{font-size:23px; color:#cfc4a8; line-height:1.5; margin:0 0 18px;}
-ul.thesis{margin:0; padding-left:24px; font-size:21px; line-height:1.55;}
-ul.thesis li{margin-bottom:11px;}
+ul.thesis{margin:0; padding-left:24px; font-size:23px; line-height:1.55;}
+ul.thesis li{margin-bottom:14px;}
 ul.thesis li::marker{color:var(--gold);}
 ul.thesis b{color:var(--gold-soft); font-weight:600;}
 /* раскладки */
@@ -85,31 +85,32 @@ figure.shot.img-fail::before{content:'Иллюстрация недоступн�
 /* карточки */
 .cards{display:grid; gap:18px;}
 .cards.cols2{grid-template-columns:repeat(2,1fr);}
+.cards.cols3{grid-template-columns:repeat(3,1fr);}
 .card{background:rgba(255,255,255,.045); border:1px solid var(--line); border-radius:12px; padding:18px 22px;}
-.card .term{display:block; color:var(--gold); font-size:21px; font-weight:700; margin-bottom:5px; letter-spacing:.02em;}
-.card p{margin:0; font-size:18px; line-height:1.42; color:#ded3ba;}
+.card .term{display:block; color:var(--gold); font-size:22px; font-weight:700; margin-bottom:5px; letter-spacing:.02em;}
+.card p{margin:0; font-size:19px; line-height:1.42; color:#ded3ba;}
 /* сравнение */
 .compare{display:grid; grid-template-columns:1fr 1fr; gap:28px;}
 .compare .side{background:rgba(255,255,255,.045); border:1px solid var(--line); border-radius:14px; padding:26px 30px;}
 .compare .side h3{font-family:Georgia,serif; font-size:26px; color:var(--gold-soft); margin:0 0 14px; font-weight:400;}
-.compare ul{margin:0; padding-left:22px; font-size:20px; line-height:1.5;}
+.compare ul{margin:0; padding-left:22px; font-size:21px; line-height:1.5;}
 .compare li{margin-bottom:9px;} .compare li::marker{color:var(--gold);}
 /* таймлайн */
-ol.timeline{list-style:none; margin:0; padding:0; counter-reset:step;}
-ol.timeline li{position:relative; padding:2px 0 20px 52px; font-size:21px; line-height:1.45;}
+ol.timeline{list-style:none; margin:0; padding:0; counter-reset:step; max-width:1250px;}
+ol.timeline li{position:relative; padding:2px 0 24px 56px; font-size:24px; line-height:1.45;}
 ol.timeline li::before{counter-increment:step; content:counter(step);
-  position:absolute; left:0; top:0; width:34px; height:34px; border:1px solid var(--gold); border-radius:50%;
-  color:var(--gold); display:flex; align-items:center; justify-content:center; font-size:16px; font-weight:700;}
-ol.timeline li i{display:block; font-style:normal; color:var(--ink-dim); font-size:17px; margin-top:3px;}
+  position:absolute; left:0; top:0; width:36px; height:36px; border:1px solid var(--gold); border-radius:50%;
+  color:var(--gold); display:flex; align-items:center; justify-content:center; font-size:17px; font-weight:700;}
+ol.timeline li i{display:block; font-style:normal; color:var(--ink-dim); font-size:19px; margin-top:4px;}
 /* цифры */
 .stats{display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:22px; margin-bottom:26px;}
-.stat{background:rgba(255,255,255,.045); border:1px solid var(--line); border-radius:14px; padding:24px 26px; text-align:center;}
-.stat .num{font-family:Georgia,serif; font-size:52px; color:var(--gold); line-height:1;}
-.stat .lbl{font-size:19px; color:#ded3ba; margin-top:10px; line-height:1.4;}
+.stat{background:rgba(255,255,255,.045); border:1px solid var(--line); border-radius:14px; padding:26px; text-align:center;}
+.stat .num{font-family:Georgia,serif; font-size:56px; color:var(--gold); line-height:1;}
+.stat .lbl{font-size:20px; color:#ded3ba; margin-top:12px; line-height:1.4;}
 .code{font-family:'Cascadia Code',Consolas,'Courier New',monospace; background:#0b1526;
-  border:1px solid var(--line); border-radius:10px; padding:16px 20px; font-size:20px; color:#cfe0ff; margin-top:14px;}
+  border:1px solid var(--line); border-radius:10px; padding:16px 20px; font-size:21px; color:#cfe0ff; margin-top:14px;}
 .note{border-left:4px solid var(--gold); background:rgba(212,169,78,.08);
-  padding:16px 22px; font-size:20px; line-height:1.5; border-radius:0 10px 10px 0; margin-top:22px;}
+  padding:18px 24px; font-size:21px; line-height:1.5; border-radius:0 10px 10px 0; margin-top:24px;}
 /* титульный и итоговый */
 .slide.title .kicker{font-size:21px; margin-bottom:22px;}
 .slide.title h1{font-family:Georgia,'Times New Roman',serif; font-size:72px; line-height:1.12;
@@ -134,130 +135,90 @@ ol.timeline li i{display:block; font-style:normal; color:var(--ink-dim); font-si
   <section class="slide">
     <div class="kicker">Лекция 2 · План</div>
     <h2>Что разберём сегодня</h2>
-    <div class="two-col">
-      <ol class="timeline">
-        <li>Автоматизация бизнес-процессов турагентства<i>полный цикл — от звонка клиента до отзыва о поездке</i></li>
-        <li>CRM «САМО-турагент» и её базовые возможности<i>профессиональная программа для турфирм</i></li>
-        <li>Словарь турагента<i>обозначения номеров, типы питания, прочие термины, чтение авиабилета</i></li>
-        <li>Программы лояльности<i>накопительные дисконтные карты и работа с постоянными клиентами</i></li>
-        <li>Претензии туристов<i>поводы, сроки и алгоритм работы менеджера</i></li>
-      </ol>
-      <figure class="shot">
-        <img src="https://loremflickr.com/1200/800/travel,office/all?lock=101" alt="Офис турагентства" onerror="this.closest('figure').classList.add('img-fail')">
-        <figcaption>Тематическая иллюстрация</figcaption>
-      </figure>
-    </div>
+    <ol class="timeline">
+      <li>Автоматизация бизнес-процессов турагентства<i>полный цикл — от звонка клиента до отзыва о поездке</i></li>
+      <li>CRM «САМО-турагент» и её базовые возможности<i>профессиональная программа для турфирм</i></li>
+      <li>Словарь турагента<i>обозначения номеров, типы питания, прочие термины, чтение авиабилета</i></li>
+      <li>Программы лояльности<i>накопительные дисконтные карты и работа с постоянными клиентами</i></li>
+      <li>Претензии туристов<i>поводы, сроки и алгоритм работы менеджера</i></li>
+    </ol>
   </section>
 
   <section class="slide">
     <div class="kicker">Лекция 2 · Автоматизация</div>
     <h2>Полный цикл: «от звонка туриста до отзыва о поездке»</h2>
-    <div class="two-col">
-      <ul class="thesis">
-        <li>Программный комплекс автоматизирует <b>весь цикл деятельности турагентства</b></li>
-        <li>Автоматизируются все направления: <b>работа с клиентами, продажи, маркетинг и финансы</b></li>
-        <li>Главная ценность — контроль и анализ ключевых показателей и правильные выводы о развитии бизнеса</li>
-        <li>Не требуется трудоёмкое заполнение множества классификаторов и справочников</li>
-        <li>Оформление заявки — прямо в присутствии клиента: оплата, договор, памятки, приходный кассовый ордер — сразу на печать или e-mail</li>
-        <li>Все сведения сохраняются в <b>общей базе данных</b>: списки туристов, статистика, платежи</li>
-      </ul>
-      <figure class="shot">
-        <img src="https://loremflickr.com/1200/800/office,meeting/all?lock=102" alt="Работа менеджера в офисе" onerror="this.closest('figure').classList.add('img-fail')">
-        <figcaption>Тематическая иллюстрация</figcaption>
-      </figure>
-    </div>
+    <ul class="thesis">
+      <li>Программный комплекс автоматизирует <b>весь цикл деятельности турагентства</b></li>
+      <li>Автоматизируются все направления: <b>работа с клиентами, продажи, маркетинг и финансы</b></li>
+      <li>Главная ценность — контроль и анализ ключевых показателей и правильные выводы о развитии бизнеса</li>
+      <li>Не требуется трудоёмкое заполнение множества классификаторов и справочников</li>
+      <li>Оформление заявки — прямо в присутствии клиента: оплата, договор, памятки, приходный кассовый ордер — сразу на печать или e-mail</li>
+      <li>Все сведения сохраняются в <b>общей базе данных</b>: списки туристов, статистика, платежи</li>
+    </ul>
   </section>
 
   <section class="slide">
     <div class="kicker">Лекция 2 · Автоматизация</div>
     <h2>Пример: CRM «САМО-турагент»</h2>
-    <div class="two-col">
-      <ul class="thesis">
-        <li>Специализированный программный комплекс для туристических агентств любого размера</li>
-        <li><b>Внутриофисная автоматизация:</b> учёт заказанных туров, оплат (клиенты, туроператоры, касса), постоянных клиентов, дисконтных карт, телефонных звонков с пожеланиями</li>
-        <li>Быстрое бронирование через сайт: модуль поиска туров, интеграция сервисов «от подбора тура до возвращения туриста»</li>
-        <li>Загрузка заявок с сайта туроператора напрямую в CRM</li>
-        <li>Класс CRM-систем для туризма сегодня — целые экосистемы: CRM, онлайн-бронирование и связанные сервисы в одном контуре (samo.ru, samo.plus)</li>
-      </ul>
-      <figure class="shot">
-        <img src="https://loremflickr.com/1200/800/laptop,desk/all?lock=103" alt="CRM на рабочем месте" onerror="this.closest('figure').classList.add('img-fail')">
-        <figcaption>CRM — рабочий инструмент менеджера (иллюстрация)</figcaption>
-      </figure>
-    </div>
+    <ul class="thesis">
+      <li>Специализированный программный комплекс для туристических агентств любого размера</li>
+      <li><b>Внутриофисная автоматизация:</b> учёт заказанных туров, оплат (клиенты, туроператоры, касса), постоянных клиентов, дисконтных карт, телефонных звонков с пожеланиями</li>
+      <li>Быстрое бронирование через сайт: модуль поиска туров, интеграция сервисов «от подбора тура до возвращения туриста»</li>
+      <li>Загрузка заявок с сайта туроператора напрямую в CRM</li>
+      <li>Класс CRM-систем для туризма сегодня — целые экосистемы: CRM, онлайн-бронирование и связанные сервисы в одном контуре (samo.ru, samo.plus)</li>
+    </ul>
   </section>
 
   <section class="slide">
     <div class="kicker">Лекция 2 · Автоматизация</div>
     <h2>Базовые возможности программы</h2>
-    <div class="two-col">
-      <div class="cards cols2">
-        <div class="card"><span class="term">1. Учёт проданных туров</span><p>создание заявки через быстрое бронирование с сайта</p></div>
-        <div class="card"><span class="term">2. Документооборот</span><p>договор, путёвка, лист бронирования, приходный ордер; подписание в офисе или онлайн</p></div>
-        <div class="card"><span class="term">3. Архив постоянных клиентов</span><p>данные вводятся один раз, повторные заявки — за минуты</p></div>
-        <div class="card"><span class="term">4. Система отчётов</span><p>доходные направления, комиссии операторов, анализ работы каждого сотрудника</p></div>
-        <div class="card"><span class="term">5. Онлайн-поиск и бронирование</span><p>прямое обращение к базам ТО: цены и наличие мест актуальны на 100%</p></div>
-        <div class="card"><span class="term">6. Сервисные функции</span><p>e-mail рассылки, учёт бонусов и рекламы, управление доступом, инфопанель</p></div>
-      </div>
-      <figure class="shot">
-        <img src="https://loremflickr.com/1200/800/charts,analytics/all?lock=104" alt="Отчёты и аналитика" onerror="this.closest('figure').classList.add('img-fail')">
-        <figcaption>Отчёты отвечают на вопросы: какие ТО и направления принесли наибольший доход</figcaption>
-      </figure>
+    <div class="cards cols3">
+      <div class="card"><span class="term">1. Учёт проданных туров</span><p>создание заявки через быстрое бронирование с сайта</p></div>
+      <div class="card"><span class="term">2. Документооборот</span><p>договор, путёвка, лист бронирования, приходный ордер; подписание в офисе или онлайн</p></div>
+      <div class="card"><span class="term">3. Архив постоянных клиентов</span><p>данные вводятся один раз, повторные заявки — за минуты</p></div>
+      <div class="card"><span class="term">4. Система отчётов</span><p>доходные направления, комиссии операторов, анализ работы каждого сотрудника</p></div>
+      <div class="card"><span class="term">5. Онлайн-поиск и бронирование</span><p>прямое обращение к базам ТО: цены и наличие мест актуальны на 100%</p></div>
+      <div class="card"><span class="term">6. Сервисные функции</span><p>e-mail рассылки, учёт бонусов и рекламы, управление доступом, инфопанель</p></div>
     </div>
+    <div class="note">Отчёты отвечают на вопросы: предложения какого ТО принесли наибольший доход? Какие направления самые доходные в сезоне? Кто из постоянников вправе рассчитывать на скидку?</div>
   </section>
 
   <section class="slide">
     <div class="kicker">Лекция 2 · Автоматизация</div>
     <h2>Путь клиента в CRM</h2>
-    <div class="two-col">
-      <ol class="timeline">
-        <li>Добавить клиента</li>
-        <li>Найти для него тур</li>
-        <li>Забронировать</li>
-        <li>Принять оплату</li>
-        <li>Подготовить документы</li>
-        <li>Отправить отдыхать</li>
-        <li>Получить отзыв по поездке</li>
-      </ol>
-      <figure class="shot">
-        <img src="https://loremflickr.com/1200/800/customer,service/all?lock=105" alt="Встреча с клиентом" onerror="this.closest('figure').classList.add('img-fail')">
-        <figcaption>Вся история взаимодействий по каждому клиенту хранится в системе</figcaption>
-      </figure>
-    </div>
+    <ol class="timeline">
+      <li>Добавить клиента</li>
+      <li>Найти для него тур</li>
+      <li>Забронировать</li>
+      <li>Принять оплату</li>
+      <li>Подготовить документы</li>
+      <li>Отправить отдыхать</li>
+      <li>Получить отзыв по поездке</li>
+    </ol>
+    <div class="note">Вся история взаимодействий по каждому клиенту хранится в системе.</div>
   </section>
 
   <section class="slide">
     <div class="kicker">Лекция 2 · Автоматизация</div>
     <h2>Лояльность внутри CRM</h2>
-    <div class="two-col">
-      <ul class="thesis">
-        <li><b>Задачи и напоминания:</b> кому перезвонить, куда отправить письмо — программа напомнит в нужный момент</li>
-        <li>База хранит информацию обо всех поездках клиента — всегда знаем, что он любит</li>
-        <li>Авторассылки: спецпредложения, изменение времени вылета, поздравления с днём рождения</li>
-        <li><b>«Не теряйте клиентов»:</b> фильтр по дате последнего контакта — список контактов с темой последнего обращения</li>
-        <li>Отчёт используют и новые сотрудники — для набора собственной клиентской базы</li>
-      </ul>
-      <figure class="shot">
-        <img src="https://loremflickr.com/1200/800/calendar,notebook/all?lock=106" alt="Планирование и напоминания" onerror="this.closest('figure').classList.add('img-fail')">
-        <figcaption>Ни одна мелочь не останется без внимания</figcaption>
-      </figure>
-    </div>
+    <ul class="thesis">
+      <li><b>Задачи и напоминания:</b> кому перезвонить, куда отправить письмо — программа напомнит в нужный момент</li>
+      <li>База хранит информацию обо всех поездках клиента — всегда знаем, что он любит</li>
+      <li>Авторассылки: спецпредложения, изменение времени вылета, поздравления с днём рождения</li>
+      <li><b>«Не теряйте клиентов»:</b> фильтр по дате последнего контакта — список контактов с темой последнего обращения</li>
+      <li>Отчёт используют и новые сотрудники — для набора собственной клиентской базы</li>
+    </ul>
   </section>
 
   <section class="slide">
     <div class="kicker">Лекция 2 · Словарь турагента</div>
     <h2>Зачем менеджеру профессиональный язык</h2>
-    <div class="two-col">
-      <ul class="thesis">
-        <li>Сокращения встречаются повсюду: в каталогах туроператоров, ваучерах, счетах, системах бронирования</li>
-        <li>Не зная аббревиатуру, менеджер <b>не прочитает описание номера и типа питания</b> — и подберёт клиенту не то</li>
-        <li>Ошибка в расшифровке = неверные ожидания туриста и будущая претензия</li>
-        <li>Группы терминов: <b>размещение и номера · кровати и категории · виды из окна · типы зданий · питание · авиабилет</b></li>
-      </ul>
-      <figure class="shot">
-        <img src="https://loremflickr.com/1200/800/books,library/all?lock=107" alt="Словарь терминов" onerror="this.closest('figure').classList.add('img-fail')">
-        <figcaption>Тематическая иллюстрация</figcaption>
-      </figure>
-    </div>
+    <ul class="thesis">
+      <li>Сокращения встречаются повсюду: в каталогах туроператоров, ваучерах, счетах, системах бронирования</li>
+      <li>Не зная аббревиатуру, менеджер <b>не прочитает описание номера и типа питания</b> — и подберёт клиенту не то</li>
+      <li>Ошибка в расшифровке = неверные ожидания туриста и будущая претензия</li>
+      <li>Группы терминов: <b>размещение и номера · кровати и категории · виды из окна · типы зданий · питание · авиабилет</b></li>
+    </ul>
   </section>
 
   <section class="slide">
@@ -274,8 +235,8 @@ ol.timeline li i{display:block; font-style:normal; color:var(--ink-dim); font-si
         <div class="card"><span class="term">ROH (run of the house)</span><p>тип номера определяет администрация при заселении</p></div>
       </div>
       <figure class="shot">
-        <img src="https://loremflickr.com/1200/800/hotel,room/all?lock=108" alt="Гостиничный номер" onerror="this.closest('figure').classList.add('img-fail')">
-        <figcaption>Тематическая иллюстрация</figcaption>
+        <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Delmar%20hotel%20room%20sea%20side.jpg?width=1200" alt="Гостиничный номер" onerror="this.closest('figure').classList.add('img-fail')">
+        <figcaption>Стандартный номер. Фото: Wikimedia Commons</figcaption>
       </figure>
     </div>
   </section>
@@ -295,8 +256,8 @@ ol.timeline li i{display:block; font-style:normal; color:var(--ink-dim); font-si
         <div class="card"><span class="term">Pool access</span><p>номер или бунгало с выходом прямо к бассейну</p></div>
       </div>
       <figure class="shot">
-        <img src="https://loremflickr.com/1200/800/hotel,luxury/all?lock=109" alt="Номер люкс" onerror="this.closest('figure').classList.add('img-fail')">
-        <figcaption>Тематическая иллюстрация</figcaption>
+        <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Family%20suite.jpg?width=1200" alt="Семейный номер" onerror="this.closest('figure').classList.add('img-fail')">
+        <figcaption>Family suite. Фото: Wikimedia Commons</figcaption>
       </figure>
     </div>
   </section>
@@ -326,8 +287,8 @@ ol.timeline li i{display:block; font-style:normal; color:var(--ink-dim); font-si
       </div>
     </div>
     <figure class="shot" style="margin-top:26px;">
-      <img src="https://loremflickr.com/1600/500/hotel,bed/all?lock=110" alt="Кровать в номере" style="max-height:230px;" onerror="this.closest('figure').classList.add('img-fail')">
-      <figcaption>Тематическая иллюстрация</figcaption>
+      <img src="https://commons.wikimedia.org/wiki/Special:FilePath/N1%20Hotel%20Bulawayo%20Twin%20Room.jpg?width=1600" alt="TWIN-номер" style="max-height:230px;" onerror="this.closest('figure').classList.add('img-fail')">
+      <figcaption>TWIN: двухместный номер с раздельными кроватями. Фото: Wikimedia Commons</figcaption>
     </figure>
   </section>
 
@@ -359,8 +320,8 @@ ol.timeline li i{display:block; font-style:normal; color:var(--ink-dim); font-si
         <div class="card"><span class="term">JV / LV / DV</span><p>джунгли / лагуна или окрестности / дюны</p></div>
       </div>
       <figure class="shot">
-        <img src="https://loremflickr.com/1200/800/sea,balcony/all?lock=112" alt="Вид на море с балкона" onerror="this.closest('figure').classList.add('img-fail')">
-        <figcaption>Sea view — самая востребованная (и самая дорогая) опция</figcaption>
+        <img src="https://commons.wikimedia.org/wiki/Special:FilePath/View%20of%20Konyaalt%C4%B1%20Beach%20and%20Beyda%C4%9Flar%C4%B1%20Mountains%2C%20Antalya.jpg?width=1200" alt="Вид на море и горы, Анталья" onerror="this.closest('figure').classList.add('img-fail')">
+        <figcaption>Sea view + Mountain view в одном кадре: пляж Коньяалты, Анталья. Фото: Wikimedia Commons</figcaption>
       </figure>
     </div>
   </section>
@@ -380,8 +341,8 @@ ol.timeline li i{display:block; font-style:normal; color:var(--ink-dim); font-si
         <div class="card"><span class="term">Water Bungalow</span><p>бунгало на сваях в воде</p></div>
       </div>
       <figure class="shot">
-        <img src="https://loremflickr.com/1200/800/water,bungalow,maldives/all?lock=113" alt="Водные бунгало" onerror="this.closest('figure').classList.add('img-fail')">
-        <figcaption>Water Bungalow — визитная карточка Мальдив</figcaption>
+        <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Adaraan%20Prestige%20Vadoo%20Maldives.jpg?width=1200" alt="Водные виллы на Мальдивах" onerror="this.closest('figure').classList.add('img-fail')">
+        <figcaption>Water Bungalow — визитная карточка Мальдив. Фото: Wikimedia Commons</figcaption>
       </figure>
     </div>
   </section>
@@ -401,8 +362,8 @@ ol.timeline li i{display:block; font-style:normal; color:var(--ink-dim); font-si
         <div class="card"><span class="term">Buffet</span><p>«шведский стол» — самообслуживание, неограниченный выбор блюд</p></div>
       </div>
       <figure class="shot">
-        <img src="https://loremflickr.com/1200/800/buffet,food/all?lock=114" alt="Шведский стол" onerror="this.closest('figure').classList.add('img-fail')">
-        <figcaption>Тематическая иллюстрация</figcaption>
+        <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Main%20course%20and%20special%20items%20at%20buffet%20on%20Viking%20Grace.jpg?width=1200" alt="Шведский стол" onerror="this.closest('figure').classList.add('img-fail')">
+        <figcaption>Buffet — «шведский стол». Фото: Wikimedia Commons</figcaption>
       </figure>
     </div>
   </section>
@@ -428,8 +389,8 @@ ol.timeline li i{display:block; font-style:normal; color:var(--ink-dim); font-si
       </div>
     </div>
     <figure class="shot" style="margin-top:26px;">
-      <img src="https://loremflickr.com/1600/500/breakfast,hotel/all?lock=115" alt="Завтрак в отеле" style="max-height:230px;" onerror="this.closest('figure').classList.add('img-fail')">
-      <figcaption>Тематическая иллюстрация</figcaption>
+      <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Breakfast%20buffet%20Marriott%20Hotel%20Lima%2001.jpg?width=1600" alt="Завтрак в отеле" style="max-height:230px;" onerror="this.closest('figure').classList.add('img-fail')">
+      <figcaption>Завтрак в отеле (BB). Фото: Wikimedia Commons</figcaption>
     </figure>
   </section>
 
@@ -448,8 +409,8 @@ ol.timeline li i{display:block; font-style:normal; color:var(--ink-dim); font-si
         <div class="card"><span class="term">Safe-deposit boxes</span><p>сейф для ценностей; Duty-free — товары без таможенного сбора</p></div>
       </div>
       <figure class="shot">
-        <img src="https://loremflickr.com/1200/800/airport/all?lock=116" alt="Аэропорт" onerror="this.closest('figure').classList.add('img-fail')">
-        <figcaption>Тематическая иллюстрация</figcaption>
+        <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Travel%20to%20Tokyo%20(Unsplash).jpg?width=1200" alt="Аэропорт" onerror="this.closest('figure').classList.add('img-fail')">
+        <figcaption>Аэропорт: начало пути туриста. Фото: Wikimedia Commons</figcaption>
       </figure>
     </div>
   </section>
@@ -469,8 +430,8 @@ ol.timeline li i{display:block; font-style:normal; color:var(--ink-dim); font-si
       <div>
         <div class="note">Буквы класса бронирования: <b>A, F, P</b> — первый класс; <b>C, J, D</b> — бизнес; все остальные (W, K, S, B, H, L, M, T, V, Y, Q) — эконом.</div>
         <figure class="shot" style="margin-top:24px;">
-          <img src="https://loremflickr.com/1200/700/airplane,wing/all?lock=117" alt="Самолёт" onerror="this.closest('figure').classList.add('img-fail')">
-          <figcaption>Тематическая иллюстрация</figcaption>
+          <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Transavia%20737%20wing.jpg?width=1200" alt="Вид из иллюминатора" onerror="this.closest('figure').classList.add('img-fail')">
+          <figcaption>Фото: Wikimedia Commons</figcaption>
         </figure>
       </div>
     </div>
@@ -489,8 +450,8 @@ ol.timeline li i{display:block; font-style:normal; color:var(--ink-dim); font-si
         <div class="card"><span class="term">FORM OF PAYMENT</span><p>CASH — наличные; INVOICE — безнал; CC + номер — кредитная карта</p></div>
       </div>
       <figure class="shot">
-        <img src="https://loremflickr.com/1200/800/boarding,pass/all?lock=118" alt="Посадочный талон" onerror="this.closest('figure').classList.add('img-fail')">
-        <figcaption>Посадочный талон: сведения о багаже, классе и номере места</figcaption>
+        <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Mount%20Hotham%20Airport%20Check-In.jpg?width=1200" alt="Стойка регистрации" onerror="this.closest('figure').classList.add('img-fail')">
+        <figcaption>Стойка регистрации: здесь решаются вопросы мест и выдаётся посадочный талон. Фото: Wikimedia Commons</figcaption>
       </figure>
     </div>
   </section>
@@ -498,21 +459,15 @@ ol.timeline li i{display:block; font-style:normal; color:var(--ink-dim); font-si
   <section class="slide">
     <div class="kicker">Лекция 2 · Лояльность</div>
     <h2>Программы лояльности турагентства</h2>
-    <div class="two-col">
-      <ul class="thesis">
-        <li><b>Накопительная дисконтная карта:</b> «Больше путешествий — больше скидка!», размер скидки зависит от направления</li>
-        <li>При выдаче карты клиент заполняет <b>анкету</b> — пополняется база контактов</li>
-        <li>Поздравления с праздниками и днём рождения</li>
-        <li>Подарки постоянным клиентам</li>
-        <li><b>Бонус за рекомендацию</b> — клиент приводит друзей и получает выгоду</li>
-        <li>Экономика вопроса: удержать постоянного туриста дешевле, чем привлечь нового</li>
-        <li>На практике программы лояльности автоматизируются: бонусы и скидки начисляются в той же CRM (напр., решения «1С-Рарус», CoralBonus у туроператоров)</li>
-      </ul>
-      <figure class="shot">
-        <img src="https://loremflickr.com/1200/800/gift,card/all?lock=119" alt="Дисконтная карта" onerror="this.closest('figure').classList.add('img-fail')">
-        <figcaption>Тематическая иллюстрация</figcaption>
-      </figure>
-    </div>
+    <ul class="thesis">
+      <li><b>Накопительная дисконтная карта:</b> «Больше путешествий — больше скидка!», размер скидки зависит от направления</li>
+      <li>При выдаче карты клиент заполняет <b>анкету</b> — пополняется база контактов</li>
+      <li>Поздравления с праздниками и днём рождения</li>
+      <li>Подарки постоянным клиентам</li>
+      <li><b>Бонус за рекомендацию</b> — клиент приводит друзей и получает выгоду</li>
+      <li>Экономика вопроса: удержать постоянного туриста дешевле, чем привлечь нового</li>
+      <li>На практике программы лояльности автоматизируются: бонусы и скидки начисляются в той же CRM (напр., решения «1С-Рарус», CoralBonus у туроператоров)</li>
+    </ul>
   </section>
 
   <section class="slide">
@@ -524,29 +479,18 @@ ol.timeline li i{display:block; font-style:normal; color:var(--ink-dim); font-si
       <div class="stat"><div class="num">3</div><div class="lbl">По предоставленной информации</div></div>
       <div class="stat"><div class="num">20 дн.</div><div class="lbl">срок рассмотрения претензии (отсчёт от даты возврата туриста из поездки)</div></div>
     </div>
-    <figure class="shot">
-      <img src="https://loremflickr.com/1600/500/documents,signing/all?lock=120" alt="Документы" style="max-height:230px;" onerror="this.closest('figure').classList.add('img-fail')">
-      <figcaption>Претензия оформляется письменно, с приложением подтверждающих документов</figcaption>
-    </figure>
+    <div class="note">Претензия оформляется письменно, с приложением подтверждающих документов.</div>
   </section>
 
   <section class="slide">
     <div class="kicker">Лекция 2 · Претензии</div>
     <h2>Алгоритм работы менеджера с претензией</h2>
-    <div class="two-col">
-      <ol class="timeline">
-        <li>Запросить у туриста недостающие документы<i>указанные в приложении к претензии и не предоставленные (например, справку о болезни)</i></li>
-        <li>Незамедлительно направить претензию ТО / поставщику<i>вместе с приложенными документами — для получения ответа по существу</i></li>
-        <li>Письменно уведомить туриста о передаче претензии<i>особенно важно: турист проявляет терпение, а агент обозначает свою роль в правоотношениях</i></li>
-      </ol>
-      <div>
-        <div class="note">Турагент обязан готовить и высылать туроператору <b>отчёты агента</b>.</div>
-        <figure class="shot" style="margin-top:24px;">
-          <img src="https://loremflickr.com/1200/700/handshake,office/all?lock=121" alt="Деловое соглашение" onerror="this.closest('figure').classList.add('img-fail')">
-          <figcaption>Тематическая иллюстрация</figcaption>
-        </figure>
-      </div>
-    </div>
+    <ol class="timeline">
+      <li>Запросить у туриста недостающие документы<i>указанные в приложении к претензии и не предоставленные (например, справку о болезни)</i></li>
+      <li>Незамедлительно направить претензию ТО / поставщику<i>вместе с приложенными документами — для получения ответа по существу</i></li>
+      <li>Письменно уведомить туриста о передаче претензии<i>особенно важно: турист проявляет терпение, а агент обозначает свою роль в правоотношениях</i></li>
+    </ol>
+    <div class="note">Турагент обязан готовить и высылать туроператору <b>отчёты агента</b>.</div>
   </section>
 
   <section class="slide conclusion">
