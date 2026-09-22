@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Лекция 2 · Технология обслуживания клиентов — ОПДПС</title>
+<style>
+:root{
+  --bg:#0a1120; --bg2:#101c33; --panel:#132038;
+  --gold:#d4a94e; --gold-soft:#e8c979;
+  --ink:#ece1c9; --ink-dim:#a9b4c6;
+  --line:rgba(212,169,78,.30);
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  background:#04070d; position:fixed; inset:0; overflow:hidden;
+  font-family:'Segoe UI',Roboto,Arial,sans-serif; color:var(--ink);
+}
+#stage{
+  position:absolute; left:50%; top:50%; width:1920px; height:1080px;
+  transform-origin:center center;
+  background:radial-gradient(1200px 700px at 82% -10%, #1a2c52 0%, #0d1626 55%, #070d1a 100%);
+  overflow:hidden;
+}
+/* ---- левая рейка ---- */
+.rail{position:absolute; left:0; top:0; bottom:0; width:96px; z-index:40;
+  display:flex; flex-direction:column; align-items:center; padding:26px 0; gap:16px;
+  border-right:1px solid var(--line); background:rgba(6,10,18,.38);}
+.rail .vlabel{writing-mode:vertical-rl; transform:rotate(180deg);
+  font-size:17px; letter-spacing:.34em; color:var(--gold); text-transform:uppercase;}
+.dots{flex:1; display:flex; flex-direction:column; justify-content:center; gap:11px;}
+.dot{width:12px; height:12px; border-radius:50%; border:2px solid var(--gold);
+  background:transparent; cursor:pointer; opacity:.45; padding:0; transition:.15s;}
+.dot:hover{opacity:.85}
+.dot.active{background:var(--gold); opacity:1; box-shadow:0 0 10px rgba(212,169,78,.6)}
+/* ---- нижнее управление ---- */
+.modebar{position:absolute; left:118px; bottom:24px; z-index:50; display:flex; gap:8px;}
+.modebar button{
+  font-family:inherit; font-size:15px; letter-spacing:.06em;
+  background:rgba(19,32,56,.85); color:var(--ink-dim);
+  border:1px solid var(--line); border-radius:8px; padding:8px 14px; cursor:pointer; transition:.15s;}
+.modebar button:hover{color:var(--ink); border-color:var(--gold)}
+.modebar button.on{color:#0a1120; background:var(--gold); border-color:var(--gold); font-weight:700;}
+.nav{position:absolute; right:42px; bottom:24px; z-index:50; display:flex; align-items:center; gap:16px;}
+.nav .count{font-size:17px; color:var(--ink-dim); letter-spacing:.08em; min-width:80px; text-align:center;}
+.nav button{
+  font-family:inherit; font-size:16px; font-weight:600; letter-spacing:.1em;
+  background:rgba(19,32,56,.85); color:var(--gold-soft);
+  border:1px solid var(--line); border-radius:8px; padding:10px 22px; cursor:pointer; transition:.15s;}
+.nav button:hover:not(:disabled){border-color:var(--gold); color:#fff}
+.nav button:disabled{opacity:.3; cursor:default}
+.close{
+  position:absolute; right:34px; top:24px; z-index:50; text-decoration:none;
+  width:46px; height:46px; display:flex; align-items:center; justify-content:center;
+  font-size:22px; color:var(--gold-soft); background:rgba(19,32,56,.85);
+  border:1px solid var(--line); border-radius:10px; transition:.15s;}
+.close:hover{border-color:var(--gold); color:#fff}
+/* ---- слайды ---- */
+.slide{
+  position:absolute; inset:0; padding:78px 120px 110px 200px;
+  display:flex; flex-direction:column; justify-content:center;
+  opacity:0; visibility:hidden; transform:translateY(14px);
+  transition:opacity .35s, transform .35s, visibility .35s; pointer-events:none;}
+.slide.active{opacity:1; visibility:visible; transform:none; pointer-events:auto;}
+.kicker{font-size:19px; letter-spacing:.3em; color:var(--gold); text-transform:uppercase;
+  font-weight:600; margin-bottom:14px;}
+.slide h2{font-family:Georgia,'Times New Roman',serif; font-size:46px; line-height:1.15;
+  color:#f4ead2; margin:0 0 26px; font-weight:400;}
+.slide h2::after{content:''; display:block; width:90px; height:3px; background:var(--gold); margin-top:18px;}
+p.lead{font-size:23px; color:#cfc4a8; line-height:1.5; margin:0 0 18px;}
+ul.thesis{margin:0; padding-left:24px; font-size:21px; line-height:1.55;}
+ul.thesis li{margin-bottom:11px;}
+ul.thesis li::marker{color:var(--gold);}
+ul.thesis b{color:var(--gold-soft); font-weight:600;}
+/* раскладки */
+.two-col{display:grid; grid-template-columns:1.25fr 1fr; gap:56px; align-items:center;}
+figure.shot{margin:0; border:1px solid var(--line); border-radius:14px; overflow:hidden;
+  box-shadow:0 24px 60px rgba(0,0,0,.45); background:var(--panel); position:relative;}
+figure.shot img{display:block; width:100%; max-height:560px; object-fit:cover;}
+figure.shot figcaption{font-size:15px; color:var(--ink-dim); padding:10px 16px;}
+figure.shot.img-fail img{display:none}
+figure.shot.img-fail::before{content:'Иллюстрация недоступна'; display:flex; height:400px;
+  align-items:center; justify-content:center; color:var(--ink-dim); font-size:19px;}
+/* карточки */
+.cards{display:grid; gap:18px;}
+.cards.cols2{grid-template-columns:repeat(2,1fr);}
+.card{background:rgba(255,255,255,.045); border:1px solid var(--line); border-radius:12px; padding:18px 22px;}
+.card .term{display:block; color:var(--gold); font-size:21px; font-weight:700; margin-bottom:5px; letter-spacing:.02em;}
+.card p{margin:0; font-size:18px; line-height:1.42; color:#ded3ba;}
+/* сравнение */
+.compare{display:grid; grid-template-columns:1fr 1fr; gap:28px;}
+.compare .side{background:rgba(255,255,255,.045); border:1px solid var(--line); border-radius:14px; padding:26px 30px;}
+.compare .side h3{font-family:Georgia,serif; font-size:26px; color:var(--gold-soft); margin:0 0 14px; font-weight:400;}
+.compare ul{margin:0; padding-left:22px; font-size:20px; line-height:1.5;}
+.compare li{margin-bottom:9px;} .compare li::marker{color:var(--gold);}
+/* таймлайн */
+ol.timeline{list-style:none; margin:0; padding:0; counter-reset:step;}
+ol.timeline li{position:relative; padding:2px 0 20px 52px; font-size:21px; line-height:1.45;}
+ol.timeline li::before{counter-increment:step; content:counter(step);
+  position:absolute; left:0; top:0; width:34px; height:34px; border:1px solid var(--gold); border-radius:50%;
+  color:var(--gold); display:flex; align-items:center; justify-content:center; font-size:16px; font-weight:700;}
+ol.timeline li i{display:block; font-style:normal; color:var(--ink-dim); font-size:17px; margin-top:3px;}
+/* цифры */
+.stats{display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:22px; margin-bottom:26px;}
+.stat{background:rgba(255,255,255,.045); border:1px solid var(--line); border-radius:14px; padding:24px 26px; text-align:center;}
+.stat .num{font-family:Georgia,serif; font-size:52px; color:var(--gold); line-height:1;}
+.stat .lbl{font-size:19px; color:#ded3ba; margin-top:10px; line-height:1.4;}
+.code{font-family:'Cascadia Code',Consolas,'Courier New',monospace; background:#0b1526;
+  border:1px solid var(--line); border-radius:10px; padding:16px 20px; font-size:20px; color:#cfe0ff; margin-top:14px;}
+.note{border-left:4px solid var(--gold); background:rgba(212,169,78,.08);
+  padding:16px 22px; font-size:20px; line-height:1.5; border-radius:0 10px 10px 0; margin-top:22px;}
+/* титульный и итоговый */
+.slide.title .kicker{font-size:21px; margin-bottom:22px;}
+.slide.title h1{font-family:Georgia,'Times New Roman',serif; font-size:72px; line-height:1.12;
+  color:#f4ead2; margin:0 0 26px; font-weight:400; max-width:1400px;}
+.slide.title .sub{font-size:26px; color:#cfc4a8; line-height:1.55; margin:0 0 34px;}
+.slide.title .author{font-size:20px; color:var(--gold-soft); letter-spacing:.06em;}
+.slide.title .hint{margin-top:52px; font-size:16px; color:var(--ink-dim); letter-spacing:.05em;}
+.slide.conclusion .note{font-size:22px;}
+</style>
+</head>
+<body>
+<div id="stage">
+
+  <section class="slide title active">
+    <div class="kicker">ОПДПС · Организация и планирование деятельности предприятий сервиса</div>
+    <h1>Лекция 2.<br>Технология обслуживания клиентов турфирмы</h1>
+    <p class="sub">Автоматизация бизнес-процессов и CRM · Словарь турагента · Программы лояльности · Претензии туристов</p>
+    <div class="author">По материалам Н. Ю. Гребенниковой</div>
+    <div class="hint">Навигация: клавиши ← → · точки слева · 23 экрана</div>
+  </section>
+
+  <section class="slide">
+    <div class="kicker">Лекция 2 · План</div>
+    <h2>Что разберём сегодня</h2>
+    <div class="two-col">
+      <ol class="timeline">
+        <li>Автоматизация бизнес-процессов турагентства<i>полный цикл — от звонка клиента до отзыва о поездке</i></li>
+        <li>CRM «САМО-турагент» и её базовые возможности<i>профессиональная программа для турфирм</i></li>
+        <li>Словарь турагента<i>обозначения номеров, типы питания, прочие термины, чтение авиабилета</i></li>
+        <li>Программы лояльности<i>накопительные дисконтные карты и работа с постоянными клиентами</i></li>
+        <li>Претензии туристов<i>поводы, сроки и алгоритм работы менеджера</i></li>
+      </ol>
+      <figure class="shot">
+        <img src="https://loremflickr.com/1200/800/travel,office/all?lock=101" alt="Офис турагентства" onerror="this.closest('figure').classList.add('img-fail')">
+        <figcaption>Тематическая иллюстрация</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section class="slide">
+    <div class="kicker">Лекция 2 · Автоматизация</div>
+    <h2>Полный цикл: «от звонка туриста до отзыва о поездке»</h2>
+    <div class="two-col">
+      <ul class="thesis">
+        <li>Программный комплекс автоматизирует <b>весь цикл деятельности турагентства</b></li>
+        <li>Автоматизируются все направления: <b>работа с клиентами, продажи, маркетинг и финансы</b></li>
+        <li>Главная ценность — контроль и анализ ключевых показателей и правильные выводы о развитии бизнеса</li>
+        <li>Не требуется трудоёмкое заполнение множества классификаторов и справочников</li>
+        <li>Оформление заявки — прямо в присутствии клиента: оплата, договор, памятки, приходный кассовый ордер — сразу на печать или e-mail</li>
+        <li>Все сведения сохраняются в <b>общей базе данных</b>: списки туристов, статистика, платежи</li>
+      </ul>
+      <figure class="shot">
+        <img src="https://loremflickr.com/1200/800/office,meeting/all?lock=102" alt="Работа менеджера в офисе" onerror="this.closest('figure').classList.add('img-fail')">
+        <figcaption>Тематическая иллюстрация</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section class="slide">
+    <div class="kicker">Лекция 2 · Автоматизация</div>
+    <h2>Пример: CRM «САМО-турагент»</h2>
+    <div class="two-col">
+      <ul class="thesis">
+        <li>Специализированный программный комплекс для туристических агентств любого размера</li>
+        <li><b>Внутриофисная автоматизация:</b> учёт заказанных туров, оплат (клиенты, туроператоры, касса), постоянных клиентов, дисконтных карт, телефонных звонков с пожеланиями</li>
+        <li>Быстрое бронирование через сайт: модуль поиска туров, интеграция сервисов «от подбора тура до возвращения туриста»</li>
+        <li>Загрузка заявок с сайта туроператора напрямую в CRM</li>
+        <li>Класс CRM-систем для туризма сегодня — целые экосистемы: CRM, онлайн-бронирование и связанные сервисы в одном контуре (samo.ru, samo.plus)</li>
+      </ul>
+      <figure class="shot">
+        <img src="https://loremflickr.com/1200/800/laptop,desk/all?lock=103" alt="CRM на рабочем месте" onerror="this.closest('figure').classList.add('img-fail')">
+        <figcaption>CRM — рабочий инструмент менеджера (иллюстрация)</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section class="slide">
+    <div class="kicker">Лекция 2 · Автоматизация</div>
+    <h2>Базовые возможности программы</h2>
+    <div class="two-col">
+      <div class="cards cols2">
+        <div class="card"><span class="term">1. Учёт проданных туров</span><p>создание заявки через быстрое бронирование с сайта</p></div>
+        <div class="card"><span class="term">2. Документооборот</span><p>договор, путёвка, лист бронирования, приходный ордер; подписание в офисе или онлайн</p></div>
+        <div class="card"><span class="term">3. Архив постоянных клиентов</span><p>данные вводятся один раз, повторные заявки — за минуты</p></div>
+        <div class="card"><span class="term">4. Система отчётов</span><p>доходные направления, комиссии операторов, анализ работы каждого сотрудника</p></div>
+        <div class="card"><span class="term">5. Онлайн-поиск и бронирование</span><p>прямое обращение к базам ТО: цены и наличие мест актуальны на 100%</p></div>
+        <div class="card"><span class="term">6. Сервисные функции</span><p>e-mail рассылки, учёт бонусов и рекламы, управление доступом, инфопанель</p></div>
+      </div>
+      <figure class="shot">
+        <img src="https://loremflickr.com/1200/800/charts,analytics/all?lock=104" alt="Отчёты и аналитика" onerror="this.closest('figure').classList.add('img-fail')">
+        <figcaption>Отчёты отвечают на вопросы: какие ТО и направления принесли наибольший доход</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section class="slide">
+    <div class="kicker">Лекция 2 · Автоматизация</div>
+    <h2>Путь клиента в CRM</h2>
+    <div class="two-col">
+      <ol class="timeline">
+        <li>Добавить клиента</li>
+        <li>Найти для него тур</li>
+        <li>Забронировать</li>
+        <li>Принять оплату</li>
+        <li>Подготовить документы</li>
+        <li>Отправить отдыхать</li>
+        <li>Получить отзыв по поездке</li>
+      </ol>
+      <figure class="shot">
+        <img src="https://loremflickr.com/1200/800/customer,service/all?lock=105" alt="Встреча с клиентом" onerror="this.closest('figure').classList.add('img-fail')">
+        <figcaption>Вся история взаимодействий по каждому клиенту хранится в системе</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section class="slide">
+    <div class="kicker">Лекция 2 · Автоматизация</div>
+    <h2>Лояльность внутри CRM</h2>
+    <div class="two-col">
+      <ul class="thesis">
+        <li><b>Задачи и напоминания:</b> кому перезвонить, куда отправить письмо — программа напомнит в нужный момент</li>
+        <li>База хранит информацию обо всех поездках клиента — всегда знаем, что он любит</li>
+        <li>Авторассылки: спецпредложения, изменение времени вылета, поздравления с днём рождения</li>
+        <li><b>«Не теряйте клиентов»:</b> фильтр по дате последнего контакта — список контактов с темой последнего обращения</li>
+        <li>Отчёт используют и новые сотрудники — для набора собственной клиентской базы</li>
+      </ul>
+      <figure class="shot">
+        <img src="https://loremflickr.com/1200/800/calendar,notebook/all?lock=106" alt="Планирование и напоминания" onerror="this.closest('figure').classList.add('img-fail')">
+        <figcaption>Ни одна мелочь не останется без внимания</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section class="slide">
+    <div class="kicker">Лекция 2 · Словарь турагента</div>
+    <h2>Зачем менеджеру профессиональный язык</h2>
+    <div class="two-col">
+      <ul class="thesis">
+        <li>Сокращения встречаются повсюду: в каталогах туроператоров, ваучерах, счетах, системах бронирования</li>
+        <li>Не зная аббревиатуру, менеджер <b>не прочитает описание номера и типа питания</b> — и подберёт клиенту не то</li>
+        <li>Ошибка в расшифровке = неверные ожидания туриста и будущая претензия</li>
+        <li>Группы терминов: <b>размещение и номера · кровати и категории · виды из окна · типы зданий · питание · авиабилет</b></li>
+      </ul>
+      <figure class="shot">
+        <img src="https://loremflickr.com/1200/800/books,library/all?lock=107" alt="Словарь терминов" onerror="this.closest('figure').classList.add('img-fail')">
+        <figcaption>Тематическая иллюстрация</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section class="slide">
+    <div class="kicker">Лекция 2 · Словарь турагента</div>
+    <h2>Обозначения размещения в номерах</h2>
+    <div class="two-col">
+      <div class="cards cols2">
+        <div class="card"><span class="term">SGL / SNGL (single)</span><p>одноместный номер или одноместное размещение в двухместном</p></div>
+        <div class="card"><span class="term">DBL (double)</span><p>двухместное размещение, одна двуспальная кровать</p></div>
+        <div class="card"><span class="term">TWIN</span><p>двухместное размещение, две раздельные кровати</p></div>
+        <div class="card"><span class="term">TRPL (triple)</span><p>трёхместное; третье место тоже стационарное</p></div>
+        <div class="card"><span class="term">DBL + EXB</span><p>двое взрослых + третий (обычно ребёнок) на дополнительной кровати</p></div>
+        <div class="card"><span class="term">4 PAX / QDR</span><p>четырёхместное размещение (quarter, quadriple)</p></div>
+        <div class="card"><span class="term">ROH (run of the house)</span><p>тип номера определяет администрация при заселении</p></div>
+      </div>
+      <figure class="shot">
+        <img src="https://loremflickr.com/1200/800/hotel,room/all?lock=108" alt="Гостиничный номер" onerror="this.closest('figure').classList.add('img-fail')">
+        <figcaption>Тематическая иллюстрация</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section class="slide">
+    <div class="kicker">Лекция 2 · Словарь турагента</div>
+    <h2>Типы номеров</h2>
+    <div class="two-col">
+      <div class="cards cols2">
+        <div class="card"><span class="term">Apartments</span><p>планировка «как квартира»: кухня, 2 и более комнат; питание обычно не входит</p></div>
+        <div class="card"><span class="term">Suite</span><p>улучшенная планировка (люкс): спальня, гостиная, холл; mini-suite, Junior Suite</p></div>
+        <div class="card"><span class="term">Studio</span><p>однокомнатный, больше стандартного, с кухней, совмещённой с комнатой</p></div>
+        <div class="card"><span class="term">Duplex</span><p>двухуровневый номер (два этажа)</p></div>
+        <div class="card"><span class="term">Family room</span><p>для семей, обычно 2 смежные комнаты</p></div>
+        <div class="card"><span class="term">Honeymoon room / suite</span><p>номер и люкс для молодожёнов</p></div>
+        <div class="card"><span class="term">Connection</span><p>смежные номера с дверью между собой</p></div>
+        <div class="card"><span class="term">Pool access</span><p>номер или бунгало с выходом прямо к бассейну</p></div>
+      </div>
+      <figure class="shot">
+        <img src="https://loremflickr.com/1200/800/hotel,luxury/all?lock=109" alt="Номер люкс" onerror="this.closest('figure').classList.add('img-fail')">
+        <figcaption>Тематическая иллюстрация</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section class="slide">
+    <div class="kicker">Лекция 2 · Словарь турагента</div>
+    <h2>Типы кроватей и категории номеров</h2>
+    <div class="compare">
+      <div class="side">
+        <h3>Типы кроватей</h3>
+        <ul>
+          <li><b>DBL</b> — одна большая двуспальная кровать</li>
+          <li><b>TWIN</b> — две раздельные кровати</li>
+          <li><b>Kingsize Bed</b> — «королевская», 180–220 см</li>
+          <li><b>Queensize Bed</b> — «королевская», 150–180 см</li>
+        </ul>
+      </div>
+      <div class="side">
+        <h3>Категории номеров</h3>
+        <ul>
+          <li><b>Standard</b> — стандартный номер</li>
+          <li><b>Superior</b> — больше стандартного по площади</li>
+          <li><b>Executive</b> — отдельная зона/этаж, повышенный сервис, бесплатные доп. услуги</li>
+          <li><b>De Luxe</b> — повышенная комфортность, Suite с доп. услугами</li>
+          <li><b>Beachfront</b> — первая линия от моря</li>
+        </ul>
+      </div>
+    </div>
+    <figure class="shot" style="margin-top:26px;">
+      <img src="https://loremflickr.com/1600/500/hotel,bed/all?lock=110" alt="Кровать в номере" style="max-height:230px;" onerror="this.closest('figure').classList.add('img-fail')">
+      <figcaption>Тематическая иллюстрация</figcaption>
+    </figure>
+  </section>
+
+  <section class="slide">
+    <div class="kicker">Лекция 2 · Словарь турагента</div>
+    <h2>Кто едет: PAX, ADL, CHD, INF</h2>
+    <div class="stats">
+      <div class="stat"><div class="num">PAX</div><div class="lbl">человек без указания возраста (например, 5PAX — пятеро, включая детей)</div></div>
+      <div class="stat"><div class="num">ADL / AD</div><div class="lbl">взрослый (adult)</div></div>
+      <div class="stat"><div class="num">CHD</div><div class="lbl">ребёнок с указанием возраста: CHD(2–6) — исполнилось 2, но нет 6</div></div>
+      <div class="stat"><div class="num">INF</div><div class="lbl">инфант 0–2 года; во многих отелях проживает бесплатно</div></div>
+    </div>
+    <div class="code">SNGL+INF+CHD(6-12) — взрослый + младенец + ребёнок 6–12 лет<br>DBL+2CHD(2-6) / 2AD+2CHD(2-6) — двое взрослых + двое детей 2–6 лет</div>
+    <div class="note">Иногда CH — «большой» ребёнок 6–15 лет, ch — «маленький» до 6; встречаются Dc/DC/Sc/SC (adult/single + child).</div>
+  </section>
+
+  <section class="slide">
+    <div class="kicker">Лекция 2 · Словарь турагента</div>
+    <h2>Виды из окон номеров</h2>
+    <div class="two-col">
+      <div class="cards cols2">
+        <div class="card"><span class="term">SV — Sea view</span><p>вид на море; SSV — боковой, Partial sea view — частичный</p></div>
+        <div class="card"><span class="term">OV — Ocean view</span><p>вид на океан</p></div>
+        <div class="card"><span class="term">BV — Beach view</span><p>вид на пляж</p></div>
+        <div class="card"><span class="term">GV — Garden view</span><p>вид на сад</p></div>
+        <div class="card"><span class="term">PV — Pool view</span><p>вид на бассейн</p></div>
+        <div class="card"><span class="term">MV — Mountain view</span><p>вид на горы</p></div>
+        <div class="card"><span class="term">CV — City view</span><p>вид на город; IV — внутренний двор отеля</p></div>
+        <div class="card"><span class="term">JV / LV / DV</span><p>джунгли / лагуна или окрестности / дюны</p></div>
+      </div>
+      <figure class="shot">
+        <img src="https://loremflickr.com/1200/800/sea,balcony/all?lock=112" alt="Вид на море с балкона" onerror="this.closest('figure').classList.add('img-fail')">
+        <figcaption>Sea view — самая востребованная (и самая дорогая) опция</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section class="slide">
+    <div class="kicker">Лекция 2 · Словарь турагента</div>
+    <h2>Типы зданий отелей</h2>
+    <div class="two-col">
+      <div class="cards cols2">
+        <div class="card"><span class="term">MB (Main Building)</span><p>основное здание; Annex — дополнительный корпус</p></div>
+        <div class="card"><span class="term">Bungalow (BG, BGL)</span><p>отдельная постройка, типична для тропических стран</p></div>
+        <div class="card"><span class="term">HV (Holiday Village)</span><p>клубный отель — комплекс бунгало; HV-1 и HV-2 различаются набором бесплатных услуг</p></div>
+        <div class="card"><span class="term">Chale / Cottage</span><p>отдельный домик, как правило в горах / коттедж</p></div>
+        <div class="card"><span class="term">Cabana</span><p>бунгало у пляжа или бассейна, может быть спальней</p></div>
+        <div class="card"><span class="term">Villa / Pool villa</span><p>VIP-уровень: свой бассейн, большая площадь, уединённость</p></div>
+        <div class="card"><span class="term">Jacuzzi villa</span><p>вилла с джакузи</p></div>
+        <div class="card"><span class="term">Water Bungalow</span><p>бунгало на сваях в воде</p></div>
+      </div>
+      <figure class="shot">
+        <img src="https://loremflickr.com/1200/800/water,bungalow,maldives/all?lock=113" alt="Водные бунгало" onerror="this.closest('figure').classList.add('img-fail')">
+        <figcaption>Water Bungalow — визитная карточка Мальдив</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section class="slide">
+    <div class="kicker">Лекция 2 · Словарь турагента</div>
+    <h2>Типы питания в отелях</h2>
+    <div class="two-col">
+      <div class="cards cols2">
+        <div class="card"><span class="term">RO / BO / NO</span><p>проживание без питания (room only / bed only / apartments only)</p></div>
+        <div class="card"><span class="term">BB (bed &amp; breakfast)</span><p>только завтраки</p></div>
+        <div class="card"><span class="term">HB (half board)</span><p>полупансион: завтрак + ужин (иногда завтрак + обед); HB+ — расширенный</p></div>
+        <div class="card"><span class="term">FB (full board)</span><p>полный пансион: 3-разовое питание; FB+ / EXTFB — расширенный</p></div>
+        <div class="card"><span class="term">ALL (All Inclusive)</span><p>«всё включено»: 3-разовое + доп. приёмы пищи, местные напитки, часть услуг отеля</p></div>
+        <div class="card"><span class="term">UALL (Ultra All Inclusive)</span><p>всё включено + импортные напитки и доп. услуги. Единого стандарта не существует!</p></div>
+        <div class="card"><span class="term">A la carte</span><p>ресторан по меню; при UALL ужин часто входит бесплатно</p></div>
+        <div class="card"><span class="term">Buffet</span><p>«шведский стол» — самообслуживание, неограниченный выбор блюд</p></div>
+      </div>
+      <figure class="shot">
+        <img src="https://loremflickr.com/1200/800/buffet,food/all?lock=114" alt="Шведский стол" onerror="this.closest('figure').classList.add('img-fail')">
+        <figcaption>Тематическая иллюстрация</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section class="slide">
+    <div class="kicker">Лекция 2 · Словарь турагента</div>
+    <h2>Типы завтраков</h2>
+    <div class="compare">
+      <div class="side">
+        <h3>Континентальный</h3>
+        <ul><li>Лёгкий завтрак: кофе или чай, сок, булочка, масло, джем</li></ul>
+        <h3 style="margin-top:22px;">Английский</h3>
+        <ul><li>Полный завтрак: сок, яичница, тосты, масло, джем, кофе или чай</li></ul>
+      </div>
+      <div class="side">
+        <h3>Американский</h3>
+        <ul><li>Как континентальный, плюс различные нарезки и горячие блюда</li></ul>
+        <h3 style="margin-top:22px;">Запомнить</h3>
+        <ul>
+          <li>Шведский стол ≠ тип питания, а формат подачи (самообслуживание)</li>
+          <li>Menu — ограниченный набор блюд из меню, обычно на ужине</li>
+        </ul>
+      </div>
+    </div>
+    <figure class="shot" style="margin-top:26px;">
+      <img src="https://loremflickr.com/1600/500/breakfast,hotel/all?lock=115" alt="Завтрак в отеле" style="max-height:230px;" onerror="this.closest('figure').classList.add('img-fail')">
+      <figcaption>Тематическая иллюстрация</figcaption>
+    </figure>
+  </section>
+
+  <section class="slide">
+    <div class="kicker">Лекция 2 · Словарь турагента</div>
+    <h2>Прочие термины, применяемые в туризме</h2>
+    <div class="two-col">
+      <div class="cards cols2">
+        <div class="card"><span class="term">Check-in-time</span><p>расчётный час в отеле — в памятке указываем всегда!</p></div>
+        <div class="card"><span class="term">Reception / Front desk</span><p>служба приёма и размещения, стойка администратора</p></div>
+        <div class="card"><span class="term">Room service</span><p>доставка еды и напитков в номер</p></div>
+        <div class="card"><span class="term">Трансфер</span><p>встреча/проводы туристов, доставка «аэропорт ↔ отель»</p></div>
+        <div class="card"><span class="term">Туристский ваучер</span><p>документ, дающий право на услуги, входящие в тур</p></div>
+        <div class="card"><span class="term">Чартер</span><p>аренда квоты мест или самолёта целиком; обычно дешевле регулярных рейсов</p></div>
+        <div class="card"><span class="term">Анимация</span><p>организация досуга, развлечений и спорта в отеле</p></div>
+        <div class="card"><span class="term">Safe-deposit boxes</span><p>сейф для ценностей; Duty-free — товары без таможенного сбора</p></div>
+      </div>
+      <figure class="shot">
+        <img src="https://loremflickr.com/1200/800/airport/all?lock=116" alt="Аэропорт" onerror="this.closest('figure').classList.add('img-fail')">
+        <figcaption>Тематическая иллюстрация</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section class="slide">
+    <div class="kicker">Лекция 2 · Словарь турагента</div>
+    <h2>Как читать авиабилет. Часть 1</h2>
+    <div class="two-col">
+      <div class="cards cols2">
+        <div class="card"><span class="term">NAME OF PASSENGER</span><p>фамилия/имя, пол (MR/MRS); CHD — ребёнок (на чартерных рейсах)</p></div>
+        <div class="card"><span class="term">FROM / TO</span><p>пункты маршрута; при нескольких аэропортах — трёхбуквенный код</p></div>
+        <div class="card"><span class="term">CARRIER</span><p>перевозчик: SU — Аэрофлот, BA — British Airways, LH — Lufthansa</p></div>
+        <div class="card"><span class="term">FLIGHT / CLASS</span><p>рейс и класс бронирования (буквой)</p></div>
+        <div class="card"><span class="term">DATE</span><p>число + трёхбуквенный месяц: 15SEP</p></div>
+        <div class="card"><span class="term">TIME</span><p>время вылета — всегда местное!</p></div>
+      </div>
+      <div>
+        <div class="note">Буквы класса бронирования: <b>A, F, P</b> — первый класс; <b>C, J, D</b> — бизнес; все остальные (W, K, S, B, H, L, M, T, V, Y, Q) — эконом.</div>
+        <figure class="shot" style="margin-top:24px;">
+          <img src="https://loremflickr.com/1200/700/airplane,wing/all?lock=117" alt="Самолёт" onerror="this.closest('figure').classList.add('img-fail')">
+          <figcaption>Тематическая иллюстрация</figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <section class="slide">
+    <div class="kicker">Лекция 2 · Словарь турагента</div>
+    <h2>Как читать авиабилет. Часть 2</h2>
+    <div class="two-col">
+      <div class="cards cols2">
+        <div class="card"><span class="term">STATUS</span><p>OK — место подтверждено; NS (no seat) — ребёнок до 2 лет без места; RQ / SA — посадка по остаточному принципу</p></div>
+        <div class="card"><span class="term">ALLOW</span><p>норма багажа: эконом ≈ 20 кг, бизнес ≈ 30 кг, первый ≈ 40 кг; ручная кладь до 5 кг</p></div>
+        <div class="card"><span class="term">FARE</span><p>тариф в валюте начала перевозки; EQUIV. FARE PAID — пересчёт в валюту оплаты</p></div>
+        <div class="card"><span class="term">TAX</span><p>аэропортовые сборы (таксы) в валюте выписки билета</p></div>
+        <div class="card"><span class="term">TOTAL</span><p>полная стоимость авиабилета</p></div>
+        <div class="card"><span class="term">FORM OF PAYMENT</span><p>CASH — наличные; INVOICE — безнал; CC + номер — кредитная карта</p></div>
+      </div>
+      <figure class="shot">
+        <img src="https://loremflickr.com/1200/800/boarding,pass/all?lock=118" alt="Посадочный талон" onerror="this.closest('figure').classList.add('img-fail')">
+        <figcaption>Посадочный талон: сведения о багаже, классе и номере места</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section class="slide">
+    <div class="kicker">Лекция 2 · Лояльность</div>
+    <h2>Программы лояльности турагентства</h2>
+    <div class="two-col">
+      <ul class="thesis">
+        <li><b>Накопительная дисконтная карта:</b> «Больше путешествий — больше скидка!», размер скидки зависит от направления</li>
+        <li>При выдаче карты клиент заполняет <b>анкету</b> — пополняется база контактов</li>
+        <li>Поздравления с праздниками и днём рождения</li>
+        <li>Подарки постоянным клиентам</li>
+        <li><b>Бонус за рекомендацию</b> — клиент приводит друзей и получает выгоду</li>
+        <li>Экономика вопроса: удержать постоянного туриста дешевле, чем привлечь нового</li>
+        <li>На практике программы лояльности автоматизируются: бонусы и скидки начисляются в той же CRM (напр., решения «1С-Рарус», CoralBonus у туроператоров)</li>
+      </ul>
+      <figure class="shot">
+        <img src="https://loremflickr.com/1200/800/gift,card/all?lock=119" alt="Дисконтная карта" onerror="this.closest('figure').classList.add('img-fail')">
+        <figcaption>Тематическая иллюстрация</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section class="slide">
+    <div class="kicker">Лекция 2 · Претензии</div>
+    <h2>Претензии туристов: поводы и срок</h2>
+    <div class="stats">
+      <div class="stat"><div class="num">1</div><div class="lbl">Отказ от тура — добровольный или вынужденный</div></div>
+      <div class="stat"><div class="num">2</div><div class="lbl">По качеству оказанных услуг</div></div>
+      <div class="stat"><div class="num">3</div><div class="lbl">По предоставленной информации</div></div>
+      <div class="stat"><div class="num">20 дн.</div><div class="lbl">срок рассмотрения претензии (отсчёт от даты возврата туриста из поездки)</div></div>
+    </div>
+    <figure class="shot">
+      <img src="https://loremflickr.com/1600/500/documents,signing/all?lock=120" alt="Документы" style="max-height:230px;" onerror="this.closest('figure').classList.add('img-fail')">
+      <figcaption>Претензия оформляется письменно, с приложением подтверждающих документов</figcaption>
+    </figure>
+  </section>
+
+  <section class="slide">
+    <div class="kicker">Лекция 2 · Претензии</div>
+    <h2>Алгоритм работы менеджера с претензией</h2>
+    <div class="two-col">
+      <ol class="timeline">
+        <li>Запросить у туриста недостающие документы<i>указанные в приложении к претензии и не предоставленные (например, справку о болезни)</i></li>
+        <li>Незамедлительно направить претензию ТО / поставщику<i>вместе с приложенными документами — для получения ответа по существу</i></li>
+        <li>Письменно уведомить туриста о передаче претензии<i>особенно важно: турист проявляет терпение, а агент обозначает свою роль в правоотношениях</i></li>
+      </ol>
+      <div>
+        <div class="note">Турагент обязан готовить и высылать туроператору <b>отчёты агента</b>.</div>
+        <figure class="shot" style="margin-top:24px;">
+          <img src="https://loremflickr.com/1200/700/handshake,office/all?lock=121" alt="Деловое соглашение" onerror="this.closest('figure').classList.add('img-fail')">
+          <figcaption>Тематическая иллюстрация</figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <section class="slide conclusion">
+    <div class="kicker">Лекция 2 · Итоги</div>
+    <h2>Что запомнить</h2>
+    <ul class="thesis">
+      <li><b>CRM</b> автоматизирует весь цикл работы агентства: от звонка клиента до отзыва о поездке</li>
+      <li><b>Словарь турагента</b> — рабочий инструмент: номера, питание, термины, чтение авиабилета</li>
+      <li><b>Программы лояльности</b> (накопительные карты, бонусы) увеличивают повторные продажи</li>
+      <li><b>Претензия</b> — рабочая ситуация: 3 повода, срок 20 дней, чёткий алгоритм из 3 шагов</li>
+    </ul>
+    <div class="note">Практика: тест по терминологии «каждый сам — потом обсуждаем» · продать тур по телефону и в офисе · кейс: должностная инструкция менеджера по туризму.</div>
+  </section>
+
+  <div class="rail">
+    <div class="vlabel">ОПДПС · Лекция 02</div>
+    <div class="dots" id="dots"></div>
+  </div>
+
+  <div class="modebar" id="modebar">
+    <button data-mode="auto">Авто</button>
+    <button data-mode="16:9">16:9</button>
+    <button data-mode="4:3">4:3</button>
+    <button data-mode="fill">Заполнить</button>
+  </div>
+
+  <div class="nav">
+    <div class="count" id="count">1 / 23</div>
+    <button id="prev">◀ Назад</button>
+    <button id="next">Вперёд ▶</button>
+  </div>
+
+  <a class="close" href="index.html" title="К списку лекций">✕</a>
+</div>
+
+<script>
+(function(){
+  var stage = document.getElementById('stage');
+  var slides = Array.prototype.slice.call(document.querySelectorAll('.slide'));
+  var dotsBox = document.getElementById('dots');
+  var countEl = document.getElementById('count');
+  var prevBtn = document.getElementById('prev');
+  var nextBtn = document.getElementById('next');
+  var modeKey = 'opdps-stage-mode';
+  var currentMode = localStorage.getItem(modeKey) || 'auto';
+  var idx = 0;
+
+  slides.forEach(function(s, i){
+    var d = document.createElement('button');
+    d.className = 'dot';
+    d.title = 'Экран ' + (i+1);
+    d.addEventListener('click', function(){ show(i); });
+    dotsBox.appendChild(d);
+  });
+  var dots = Array.prototype.slice.call(dotsBox.children);
+
+  function boxFor(mode){
+    if(mode === '16:9') return {w:1920, h:1080};
+    if(mode === '4:3')  return {w:1440, h:1080};
+    if(mode === 'fill') return null;
+    var ar = window.innerWidth / window.innerHeight;
+    return ar < 1.5 ? {w:1440, h:1080} : {w:1920, h:1080};
+  }
+  function apply(){
+    if(currentMode === 'fill'){
+      stage.style.width = '1920px';
+      stage.style.height = '1080px';
+      var sx = window.innerWidth / 1920, sy = window.innerHeight / 1080;
+      stage.style.transform = 'translate(-50%,-50%) scale(' + sx + ',' + sy + ')';
+      return;
+    }
+    var box = boxFor(currentMode);
+    stage.style.width = box.w + 'px';
+    stage.style.height = box.h + 'px';
+    var k = Math.min(window.innerWidth / box.w, window.innerHeight / box.h);
+    stage.style.transform = 'translate(-50%,-50%) scale(' + k + ')';
+  }
+  function setMode(m){
+    currentMode = m;
+    localStorage.setItem(modeKey, m);
+    Array.prototype.forEach.call(document.querySelectorAll('#modebar button'), function(b){
+      b.classList.toggle('on', b.getAttribute('data-mode') === m);
+    });
+    apply();
+  }
+  Array.prototype.forEach.call(document.querySelectorAll('#modebar button'), function(b){
+    b.addEventListener('click', function(){ setMode(b.getAttribute('data-mode')); });
+  });
+
+  function show(i){
+    if(i < 0) i = 0;
+    if(i > slides.length - 1) i = slides.length - 1;
+    slides[idx].classList.remove('active');
+    dots[idx].classList.remove('active');
+    idx = i;
+    slides[idx].classList.add('active');
+    dots[idx].classList.add('active');
+    countEl.textContent = (idx + 1) + ' / ' + slides.length;
+    prevBtn.disabled = idx === 0;
+    nextBtn.disabled = idx === slides.length - 1;
+  }
+  prevBtn.addEventListener('click', function(){ show(idx - 1); });
+  nextBtn.addEventListener('click', function(){ show(idx + 1); });
+  document.addEventListener('keydown', function(e){
+    if(e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === 'PageDown' || e.key === ' ') show(idx + 1);
+    if(e.key === 'ArrowLeft' || e.key === 'ArrowUp' || e.key === 'PageUp') show(idx - 1);
+    if(e.key === 'Home') show(0);
+    if(e.key === 'End') show(slides.length - 1);
+  });
+  window.addEventListener('resize', apply);
+
+  setMode(currentMode);
+  show(0);
+})();
+</script>
+</body>
+</html>
