@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Лекция 6 — Международный туризм · ОПДПС</title>
+<meta name="description" content="Интерактивная веб-презентация. Курс «Организация и планирование деятельности предприятий сервиса». Лектор: Н. Ю. Гребенникова.">
+<style>
+:root{--gold:#d4a94e;--soft:#e8c979;--ink:#ece1c9;--muted:#bcae90;--card:rgba(255,255,255,.035);--line:rgba(212,169,78,.35)}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%}
+body{position:fixed;inset:0;overflow:hidden;background:#05070d;color:var(--ink);
+font-family:'Segoe UI','Helvetica Neue',Arial,sans-serif;-webkit-font-smoothing:antialiased}
+#stage{position:absolute;left:50%;top:50%;transform-origin:center;
+width:1920px;height:1080px;
+background:radial-gradient(1400px 900px at 72% 18%,#1a2c52 0%,#0d1626 55%,#070d1a 100%)}
+section.slide{position:absolute;inset:0;padding:78px 120px 110px 200px;
+display:flex;flex-direction:column;justify-content:center;gap:34px;
+opacity:0;pointer-events:none;transition:opacity .45s ease}
+section.slide.active{opacity:1;pointer-events:auto}
+h2{font-size:46px;font-weight:700;letter-spacing:.4px;color:var(--soft);position:relative;padding-bottom:18px}
+h2::after{content:"";position:absolute;left:0;bottom:0;width:120px;height:4px;border-radius:2px;
+background:linear-gradient(90deg,var(--gold),transparent)}
+p{font-size:22px;line-height:1.5;color:var(--ink)}
+.rail{position:absolute;left:0;top:0;bottom:0;width:96px;display:flex;flex-direction:column;
+align-items:center;justify-content:center;gap:26px;border-right:1px solid rgba(212,169,78,.18);
+background:rgba(5,8,15,.35)}
+.rail .label{writing-mode:vertical-rl;transform:rotate(180deg);font-size:15px;letter-spacing:4px;
+text-transform:uppercase;color:var(--muted)}
+.rail .dots{display:flex;flex-direction:column;gap:10px;max-height:62%;flex-wrap:nowrap;overflow:hidden}
+.rail .dot{width:11px;height:11px;border-radius:50%;border:2px solid var(--gold);background:transparent;
+cursor:pointer;transition:background .25s}
+.rail .dot.active{background:var(--gold)}
+.modebar{position:absolute;right:26px;top:24px;display:flex;gap:8px;z-index:5}
+.modebar button{font-size:14px;letter-spacing:1px;padding:8px 14px;border-radius:20px;cursor:pointer;
+border:1px solid var(--line);background:transparent;color:var(--muted);transition:all .2s}
+.modebar button.active{color:#0d1626;background:var(--gold);border-color:var(--gold)}
+.nav{position:absolute;right:40px;bottom:30px;display:flex;align-items:center;gap:18px;z-index:5}
+.nav .count{font-size:17px;color:var(--muted);letter-spacing:2px}
+.nav button{width:52px;height:52px;border-radius:50%;border:1px solid var(--line);cursor:pointer;
+background:rgba(255,255,255,.04);color:var(--soft);font-size:21px;transition:all .2s}
+.nav button:hover{background:var(--gold);color:#0d1626}
+a.close{position:absolute;left:120px;top:26px;font-size:15px;letter-spacing:2px;text-transform:uppercase;
+color:var(--muted);text-decoration:none;border:1px solid var(--line);border-radius:20px;padding:8px 16px}
+a.close:hover{color:var(--soft);border-color:var(--gold)}
+.cards{display:grid;gap:22px}
+.cols2{grid-template-columns:1fr 1fr}.cols3{grid-template-columns:1fr 1fr 1fr}.cols4{grid-template-columns:repeat(4,1fr)}
+.card{background:var(--card);border:1px solid rgba(212,169,78,.16);border-radius:14px;padding:24px 26px}
+.card .term{font-size:22px;font-weight:700;color:var(--soft);margin-bottom:10px}
+.card p{font-size:20px}
+.compare{display:grid;grid-template-columns:1fr 1fr;gap:36px}
+.compare .side{background:var(--card);border-radius:16px;padding:30px 34px;border-top:4px solid var(--gold)}
+.compare .side h3{font-size:26px;color:var(--soft);margin-bottom:16px}
+.compare .side li{font-size:21px}
+ol.timeline{list-style:none;display:flex;flex-direction:column;gap:18px}
+ol.timeline li{display:flex;align-items:flex-start;gap:18px;font-size:22px;line-height:1.45}
+ol.timeline li .n{flex:0 0 44px;height:44px;border-radius:50%;border:2px solid var(--gold);color:var(--soft);
+display:flex;align-items:center;justify-content:center;font-weight:700;font-size:20px}
+ol.timeline li small{display:block;color:var(--muted);font-size:18px;font-style:italic}
+.stats{display:flex;gap:40px}
+.stats .stat{flex:1;text-align:center;background:var(--card);border-radius:16px;padding:26px 16px}
+.stats .stat b{display:block;font-size:56px;color:var(--gold);font-weight:800}
+.stats .stat span{font-size:19px;color:var(--muted)}
+.note{border-left:5px solid var(--gold);background:rgba(212,169,78,.08);border-radius:0 12px 12px 0;
+padding:20px 26px;font-size:21px;line-height:1.5}
+.note b{color:var(--soft)}
+.code{font-family:'Consolas','Courier New',monospace;background:#0a1220;border:1px solid rgba(212,169,78,.25);
+border-radius:12px;padding:18px 24px;font-size:22px;color:var(--soft);letter-spacing:1px}
+.two-col{display:grid;grid-template-columns:1.15fr .85fr;gap:44px;align-items:center}
+figure.shot{margin:0;border-radius:16px;overflow:hidden;border:1px solid rgba(212,169,78,.22);
+background:#0a1322;display:flex;flex-direction:column;min-height:420px;justify-content:center}
+figure.shot img{width:100%;height:520px;object-fit:cover;display:block}
+figure.shot figcaption{font-size:15px;color:var(--muted);padding:12px 16px;border-top:1px solid rgba(212,169,78,.14)}
+figure.shot.img-fail img{display:none}
+figure.shot.img-fail::before{content:"Иллюстрация недоступна";color:var(--muted);font-size:20px;
+text-align:center;padding:120px 20px}
+ul.plain{list-style:none;display:flex;flex-direction:column;gap:14px}
+ul.plain li{font-size:22px;line-height:1.45;padding-left:26px;position:relative}
+ul.plain li::before{content:"▸";position:absolute;left:0;color:var(--gold)}
+.slide.title{justify-content:center;text-align:left}
+.slide.title .kicker{font-size:20px;letter-spacing:5px;text-transform:uppercase;color:var(--muted)}
+.slide.title h1{font-size:76px;font-weight:800;color:var(--soft);line-height:1.12}
+.slide.title .sub{font-size:26px;color:var(--ink);max-width:1300px;line-height:1.5}
+.slide.title .meta{font-size:19px;color:var(--muted);letter-spacing:1px}
+.gold{color:var(--gold)}
+.dim{color:var(--muted);font-size:18px}
+</style>
+</head>
+<body>
+<div id="stage">
+<a class="close" href="index.html">← Все лекции</a>
+<div class="modebar">
+ <button data-mode="auto">Авто</button>
+ <button data-mode="169">16:9</button>
+ <button data-mode="43">4:3</button>
+ <button data-mode="fill">Заполнить</button>
+</div>
+<nav class="rail" aria-label="Навигация по слайдам">
+ <div class="label">Лекция 06 · Международный туризм</div>
+ <div class="dots" id="dots"></div>
+</nav>
+
+<section class="slide title">
+ <div class="kicker">Организация и планирование деятельности предприятий сервиса</div>
+ <h1>Лекция 6.<br>Международный туризм</h1>
+ <p class="sub">Особенности деятельности: документы на выезд, аэропорт вылета и прилёта,
+ правила отеля, медицина за рубежом, курорты Турции, сезонность направлений и Таиланд.</p>
+ <p class="meta">Лектор — Н. Ю. Гребенникова, директор турфирмы «Система» (Барнаул), вице-президент Алтайской региональной ассоциации туризма</p>
+</section>
+
+<section class="slide">
+ <h2>Карта лекции</h2>
+ <ol class="timeline">
+  <li><span class="n">1</span><span>Документы перед отъездом<small>загранпаспорта, билеты, полисы, ваучеры; особые правила для детей</small></span></li>
+  <li><span class="n">2</span><span>Аэропорт вылета<small>регистрация, таможня, погранконтроль, посадка</small></span></li>
+  <li><span class="n">3</span><span>Прилёт: трансфер, отель, обратный выезд<small>паспортный контроль, заселение, расчётный час</small></span></li>
+  <li><span class="n">4</span><span>Медицина за рубежом<small>как работает страховой полис</small></span></li>
+  <li><span class="n">5</span><span>Турция<small>почему она, курорты Кемер — Сиде — Белек — Аланья, тест</small></span></li>
+  <li><span class="n">6</span><span>Сезонность, туроператоры, Таиланд<small>календарь направлений, форматы туров, Бангкок — Паттайя — Пхукет</small></span></li>
+ </ol>
+</section>
+
+<section class="slide">
+ <h2>Перед отъездом: проверяем документы</h2>
+ <div class="two-col">
+  <div class="cards cols2">
+   <div class="card"><div class="term">Загранпаспорт</div><p>Главный документ поездки. Проверить срок действия и наличие у всех участников.</p></div>
+   <div class="card"><div class="term">Авиабилеты</div><p>Распечатать или держать под рукой в электронном виде на каждого туриста.</p></div>
+   <div class="card"><div class="term">Страховые полисы и ваучеры</div><p>Полис — обязательная часть пакета; ваучер подтверждает право на услуги тура.</p></div>
+   <div class="card"><div class="term">Дополнительно</div><p>Справка на вывоз наличной валюты (при необходимости), водительские права — если планируется прокат автомобиля.</p></div>
+  </div>
+  <figure class="shot"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Four_Different_Passports.jpg?width=1200" alt="Заграничные паспорта — первый пункт чек-листа" loading="lazy" onerror="this.closest('figure').classList.add('img-fail')"><figcaption>Заграничные паспорта — первый пункт чек-листа · Фото: Wikimedia Commons</figcaption></figure>
+ </div>
+ <div class="note"><b>Правило менеджера:</b> чек-лист документов выдаём туристу заранее — до вылета, а не за день до него.</div>
+</section>
+
+<section class="slide">
+ <h2>Выезд с детьми: три сценария</h2>
+ <div class="cards cols3">
+  <div class="card"><div class="term">Родитель с биометрическим паспортом</div>
+   <p>Ребёнок выезжает <b>только по собственному</b> заграничному паспорту.</p></div>
+  <div class="card"><div class="term">Родитель с паспортом старого образца</div>
+   <p>Ребёнок может выезжать <b>без собственного паспорта</b>, если вписан в небиометрический паспорт сопровождающего родителя.</p></div>
+  <div class="card"><div class="term">Ребёнок без родителей</div>
+   <p>Рекомендуется согласие обоих родителей; при поездке с одним из родителей полезно иметь при себе свидетельство о рождении.</p></div>
+ </div>
+ <div class="note">Виза и правила въезда конкретной страны менеджер проверяет по официальным источникам — и фиксирует выдачу этой информации туристу.</div>
+</section>
+
+<section class="slide">
+ <h2>В аэропорту вылета: сколько времени</h2>
+ <div class="two-col">
+  <div>
+   <div class="stats">
+    <div class="stat"><b>2–3 ч</b><span>начало регистрации на международный рейс</span></div>
+    <div class="stat"><b>40 мин</b><span>конец регистрации до вылета по расписанию</span></div>
+    <div class="stat"><b>20 мин</b><span>конец посадки в самолёт</span></div>
+   </div>
+   <div class="note" style="margin-top:26px">У ряда авиакомпаний (например, Onur Air, Pegasus) регистрация заканчивается за <b>1 час</b> до вылета. Многие перевозчики предлагают онлайн-регистрацию — уточняйте у своей.</div>
+  </div>
+  <figure class="shot"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/0117_Domodedovo_International_Airport_16th_of_August_2016.jpg?width=1200" alt="Терминал аэропорта: регистрация и выходы на посадку" loading="lazy" onerror="this.closest('figure').classList.add('img-fail')"><figcaption>Терминал аэропорта: регистрация и выходы на посадку · Фото: Wikimedia Commons</figcaption></figure>
+ </div>
+</section>
+
+<section class="slide">
+ <h2>Четыре шага пассажира</h2>
+ <ol class="timeline">
+  <li><span class="n">1</span><span>Таможенный досмотр<small>вывоз подлежащих декларированию предметов или крупной наличности — заполняем декларацию и храним её до возвращения в Россию</small></span></li>
+  <li><span class="n">2</span><span>Регистрация на рейс<small>онлайн заранее или на стойке; номер стойки — на табло напротив рейса; место в салоне решается только на стойке</small></span></li>
+  <li><span class="n">3</span><span>Пограничный контроль<small>проходим в любой свободной кабине</small></span></li>
+  <li><span class="n">4</span><span>Посадка<small>выход указан в посадочном талоне; посадка заканчивается за 20 минут до вылета</small></span></li>
+ </ol>
+ <div class="note"><b>Помним о багаже:</b> норма бесплатного провоза ограничена, сверхнорма оплачивается отдельно. Время в билетах всегда указано местное.</div>
+</section>
+
+<section class="slide">
+ <h2>По прилёте: паспортный контроль</h2>
+ <div class="two-col">
+  <div>
+   <ul class="plain">
+    <li>Проходим стойку с надписью <b>PASSPORT CONTROL</b>.</li>
+    <li>Держим под рукой паспорт, ваучер и обратный билет.</li>
+    <li>Далее — получение багажа и выход к стойкам принимающих компаний.</li>
+   </ul>
+   <div class="note" style="margin-top:26px"><b>Внимание (на примере Турции):</b> пограничники могут попросить показать наличные из расчёта 50 USD на каждый день пребывания или банковскую карту.</div>
+  </div>
+  <figure class="shot"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/%D0%9F%D0%B0%D1%81%D0%BF%D0%BE%D1%80%D1%82%D0%BD%D1%8B%D0%B9_%D0%BA%D0%BE%D0%BD%D1%82%D1%80%D0%BE%D0%BB%D1%8C_%D0%B2_%D0%B0%D1%8D%D1%80%D0%BE%D0%BF%D0%BE%D1%80%D1%82%D1%83_%D0%90%D0%BD%D1%82%D0%B0%D0%BB%D1%8C%D0%B8.JPG?width=1200" alt="Паспортный контроль в аэропорту Антальи" loading="lazy" onerror="this.closest('figure').classList.add('img-fail')"><figcaption>Паспортный контроль в аэропорту Антальи · Фото: Wikimedia Commons</figcaption></figure>
+ </div>
+</section>
+
+<section class="slide">
+ <h2>Трансфер и встреча с гидом</h2>
+ <div class="cards cols2">
+  <div class="card"><div class="term">Стойка принимающей стороны</div><p>У выхода из терминала ищем стойку с логотипом туроператора, называем фамилию и предъявляем ваучер — туриста проводят к автобусу.</p></div>
+  <div class="card"><div class="term">Трансфер до отеля</div><p>Дорога из аэропорта — время для первых вопросов: представитель компании отвечает и помогает с заселением.</p></div>
+  <div class="card"><div class="term">Инфовстреча с гидом</div><p>Обычно на следующий день после приезда. Время и место сообщает трансферный гид или представитель в отеле; здесь же — информация об экскурсиях.</p></div>
+  <div class="card"><div class="term">Не «пиратские» экскурсии</div><p>Не обращаемся в уличные экскурсионные бюро: у их гидов нет сертификатов, а ответственность за безопасность туриста не застрахована.</p></div>
+ </div>
+</section>
+
+<section class="slide">
+ <h2>Заселение в отель</h2>
+ <div class="two-col">
+  <div>
+   <ul class="plain">
+    <li>Расселение в день приезда — <b>после 14:00</b>; распределение номеров — прерогатива администрации отеля.</li>
+    <li>На ресепшн заполняем регистрационную карту <b>на английском языке</b>.</li>
+    <li>В некоторых отелях паспорт остаётся на стойке регистрации — это нормальная практика.</li>
+    <li>Деньги и драгоценности храним в <b>сейфе</b>, а не в номере.</li>
+   </ul>
+  </div>
+  <figure class="shot"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Hotel_Akka_Antedon_5_-_panoramio.jpg?width=1200" alt="Территория курортного отеля на побережье (Кемер)" loading="lazy" onerror="this.closest('figure').classList.add('img-fail')"><figcaption>Территория курортного отеля на побережье (Кемер) · Фото: Wikimedia Commons</figcaption></figure>
+ </div>
+</section>
+
+<section class="slide">
+ <h2>Выезд из отеля: расчётный час</h2>
+ <div class="cards cols2">
+  <div class="card"><div class="term">12:00 — освобождаем номер</div><p>Опоздание даёт отелю право выставить счёт за следующие сутки. Багаж оставляем в камере хранения.</p></div>
+  <div class="card"><div class="term">Считаемся по допуслугам</div><p>Телефон, мини-бар, питание в номер, массаж — оплачиваем до приезда автобуса; состояние счёта и распечатку берём на ресепшн.</p></div>
+  <div class="card"><div class="term">Время трансфера</div><p>Точное время подачи автобуса появляется на информационном стенде туроператора накануне вылета после 18:00.</p></div>
+  <div class="card"><div class="term">Потеря документов</div><p>Утрату паспорта, билета или багажа немедленно сообщаем представителю принимающей стороны — иначе ответственность за последствия несёт сам турист.</p></div>
+ </div>
+</section>
+
+<section class="slide">
+ <h2>Медицина за рубежом</h2>
+ <ol class="timeline">
+  <li><span class="n">1</span><span>Недомогание или травма — первый шаг: звонок в центр неотложной помощи по телефонам из страхового полиса.<small>бесплатная помощь организуется только через страховую</small></span></li>
+  <li><span class="n">2</span><span>Обратились в клинику без направления страховой — оплачиваем услуги самостоятельно.<small>условия страхования читаем заранее, до поездки</small></span></li>
+  <li><span class="n">3</span><span>Большинство полисов покрывают несчастные случаи и внезапные заболевания.<small>обострения хронических болезней, как правило, не покрываются — лечится за свой счёт</small></span></li>
+  <li><span class="n">4</span><span>Хронические заболевания: заранее консультация с лечащим врачом, чтобы не допустить обострения в поездке.</span></li>
+ </ol>
+ <div class="note"><b>Для памятки туристу:</b> номера ассистанс-компании выписываем на видное место — они указаны в полисе.</div>
+</section>
+
+<section class="slide">
+ <h2>Турция: почему именно она</h2>
+ <div class="cards cols3">
+  <div class="card"><div class="term">Вылет из Барнаула</div><p>Прямое сообщение, которого нет у большинства других направлений.</p></div>
+  <div class="card"><div class="term">Безвизовый въезд</div><p>Никакой визовой подготовки для туриста.</p></div>
+  <div class="card"><div class="term">Море</div><p>Средиземное и Эгейское — одни из самых солёных морей мира.</p></div>
+  <div class="card"><div class="term">«Всё включено»</div><p>Понятная и предсказуемая система питания и обслуживания.</p></div>
+  <div class="card"><div class="term">Анимация</div><p>Активная дневная и вечерняя программа в отелях.</p></div>
+  <div class="card"><div class="term">Экспурсии</div><p>Обширная программа: от древних городов до Памуккале.</p></div>
+  <div class="card"><div class="term">Цены</div><p>Доступная ценовая политика при развитой инфраструктуре курортов.</p></div>
+  <div class="card"><div class="term">Отельная база</div><p>От скромных трёх звёзд до люксовых резортов.</p></div>
+  <div class="card"><div class="term">Шопинг и кухня</div><p>Торговля, турецкие сладости и национальная кухня.</p></div>
+ </div>
+</section>
+
+<section class="slide">
+ <h2>Курорты вокруг Анталии</h2>
+ <div class="stats">
+  <div class="stat"><b>~30 км</b><span>Белек — от аэропорта Анталии</span></div>
+  <div class="stat"><b>~40 км</b><span>Кемер — от аэропорта Анталии</span></div>
+  <div class="stat"><b>70–90 км</b><span>Сиде — от аэропорта Анталии</span></div>
+  <div class="stat"><b>250 м</b><span>высота мыса с крепостью Аланьи</span></div>
+ </div>
+ <ul class="plain">
+  <li><b>Кемер</b> — Таврские горы, пинии, галечные пляжи; посёлки Кириш, Текирова, Гейнюк, Бельдиби, Чамьюва.</li>
+  <li><b>Сиде</b> — древний греческий город, музей под открытым небом, песчаные пляжи.</li>
+  <li><b>Белек</b> — молодой курорт, пятизвёздочные отели, эвкалипты и гольф-поля.</li>
+  <li><b>Аланья</b> — крепость-символ побережья, отличные песчаные пляжи.</li>
+ </ul>
+</section>
+
+<section class="slide">
+ <h2>Кемер</h2>
+ <div class="two-col">
+  <div>
+   <ul class="plain">
+    <li>Рыбацкий посёлок, выросший в красивый городок с отелями, ресторанами и дискотеками.</li>
+    <li>Самый известный курорт побережья: Таврские горы, рощи пиний и сосен.</li>
+    <li>Галечные пляжи с чистейшей водой.</li>
+    <li>Курортные посёлки рядом: Кириш, Текирова, Гейнюк, Бельдиби, Чамьюва.</li>
+   </ul>
+  </div>
+  <figure class="shot"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Kemer_Marina_-_panoramio.jpg?width=1200" alt="Марина Кемера на фоне Таврских гор" loading="lazy" onerror="this.closest('figure').classList.add('img-fail')"><figcaption>Марина Кемера на фоне Таврских гор · Фото: Wikimedia Commons</figcaption></figure>
+ </div>
+</section>
+
+<section class="slide">
+ <h2>Сиде</h2>
+ <div class="two-col">
+  <div>
+   <ul class="plain">
+    <li>На маленьком полуострове, в 70–90 км от аэропорта; основан греческими колонистами, центр античной морской торговли и важный порт.</li>
+    <li>Сегодня — музей под открытым небом.</li>
+    <li>Памятники древности: амфитеатр, нимфеум-фонтан, римские бани.</li>
+    <li>Изумительные песчаные пляжи и знаменитая дискотека Oxid.</li>
+   </ul>
+  </div>
+  <figure class="shot"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Side_Apollon_Tap%C4%B1na%C4%9F%C4%B1.jpg?width=1200" alt="Храм Аполлона — визитная карточка античного Сиде" loading="lazy" onerror="this.closest('figure').classList.add('img-fail')"><figcaption>Храм Аполлона — визитная карточка античного Сиде · Фото: Wikimedia Commons</figcaption></figure>
+ </div>
+</section>
+
+<section class="slide">
+ <h2>Белек</h2>
+ <div class="two-col">
+  <div>
+   <ul class="plain">
+    <li>Молодой курорт в 30 км от Анталии.</li>
+    <li>Много пятизвёздочных и элитных отелей.</li>
+    <li>Эвкалиптовые рощи, сосновые леса, песчаные пляжи и чистое море.</li>
+    <li>Гордость курорта — гольф-поля: национальный гольф-клуб — один из крупнейших в мире.</li>
+   </ul>
+  </div>
+  <figure class="shot"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Golf_sahas%C4%B1.jpg?width=1200" alt="Гольф-поле — визитная карточка Белека" loading="lazy" onerror="this.closest('figure').classList.add('img-fail')"><figcaption>Гольф-поле — визитная карточка Белека · Фото: Wikimedia Commons</figcaption></figure>
+ </div>
+</section>
+
+<section class="slide">
+ <h2>Аланья</h2>
+ <div class="two-col">
+  <div>
+   <ul class="plain">
+    <li>Массивная крепость возвышается на одном из красивейших мысов Средиземного моря, на высоте 250 м.</li>
+    <li>В 1221 году крепость построил султан, превративший Аланью в свою резиденцию <span class="dim">(сельджукский султан Кей-Кубад I — уточнение по материалам Commons)</span>.</li>
+    <li>Задолго до этого Марк Антоний подарил город и всю Киликию Клеопатре.</li>
+    <li>Отличные песчаные пляжи.</li>
+   </ul>
+  </div>
+  <figure class="shot"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Red_Tower_%28Foreground%29%2C_Alanya_Castle_%28Background%29%2C_Alanya%2C_T%C3%BCrkiye.jpg?width=1200" alt="Красная башня и крепость Аланьи" loading="lazy" onerror="this.closest('figure').classList.add('img-fail')"><figcaption>Красная башня и крепость Аланьи · Фото: Wikimedia Commons</figcaption></figure>
+ </div>
+</section>
+
+<section class="slide">
+ <h2>Проверь себя: Турция</h2>
+ <div class="cards cols2">
+  <div class="card"><div class="term">1. Столица Турции</div><p>Анкара. Измир, Стамбул и Анталия — нет.</p></div>
+  <div class="card"><div class="term">2. Какой святой родом с земель нынешней Турции?</div><p>Николай Чудотворец — из ликийских Мир (совр. Демре).</p></div>
+  <div class="card"><div class="term">3. Что к Турции не относится?</div><p>Акрополь — это Афины, Греция. Памуккале, Каппадокия и Голубая мечеть — Турция.</p></div>
+  <div class="card"><div class="term">4. Почему «белые горы» Памуккале белые?</div><p>Известковые (травертиновые) отложения термальных источников.</p></div>
+  <div class="card"><div class="term">5. Какого моря в Турции нет?</div><p>Адриатического. Чёрное, Эгейское и Мраморное — омывают страну.</p></div>
+ </div>
+</section>
+
+<section class="slide">
+ <h2>Сезонность направлений</h2>
+ <div class="compare">
+  <div class="side">
+   <h3>Май — октябрь</h3>
+   <ul class="plain">
+    <li>Турция, Греция, Кипр</li>
+    <li>Испания, Италия, Тунис</li>
+    <li>Морская Европа в целом</li>
+   </ul>
+  </div>
+  <div class="side">
+   <h3>Октябрь — май</h3>
+   <ul class="plain">
+    <li>Таиланд (Паттайя, Самуи, Пхукет), Вьетнам</li>
+    <li>ОАЭ, Бали (Индонезия), Китай, Египет</li>
+    <li>Куба, Доминикана, Мексика, Мальдивы</li>
+   </ul>
+  </div>
+ </div>
+ <div class="note">Европа работает <b>круглый год</b> — экскурсионные туры и лечение.</div>
+</section>
+
+<section class="slide">
+ <h2>Туроператоры и форматы туров</h2>
+ <div class="cards cols3">
+  <div class="card"><div class="term">Пакетные туры</div><p>Готовый турпродукт туроператора: перелёт + размещение (часто + трансфер и страховка).</p></div>
+  <div class="card"><div class="term">Индивидуальные туры</div><p>Собираются под запрос туриста; FIT — работа с индивидуальным туристом вне пакета.</p></div>
+  <div class="card"><div class="term">Экзотика</div><p>Мексика, Мальдивы, Доминикана, Куба — вылеты из Москвы. <b>Важно: стыковки рейсов!</b></p></div>
+ </div>
+ <div class="cards cols4">
+  <div class="card"><div class="term">Турция, Таиланд</div><p>Широкий круг операторов, включая крупнейших на рынке.</p></div>
+  <div class="card"><div class="term">ОАЭ, Египет</div><p>Отдельные специализированные и массовые операторы.</p></div>
+  <div class="card"><div class="term">Греция, Испания, Италия, Чехия, Кипр</div><p>Профильные европейские операторы.</p></div>
+  <div class="card"><div class="term">Вьетнам, Китай, Мальдивы</div><p>Часть программ — с вылетом через Новосибирск.</p></div>
+ </div>
+ <p class="dim">Состав операторов по направлениям — учебный список из конспекта лекции; перед работой проверяйте оператора в Едином федеральном реестре туроператоров.</p>
+</section>
+
+<section class="slide">
+ <h2>Таиланд: Бангкок</h2>
+ <div class="two-col">
+  <div>
+   <ul class="plain">
+    <li><b>Королевский дворец</b> (Grand Palace) — главная экскурсия столицы.</li>
+    <li>Статуи Золотого Будды.</li>
+    <li>Зоопарк Бангкока.</li>
+    <li>Аквариум в Siam World.</li>
+   </ul>
+   <div class="note" style="margin-top:26px">Бангкок удобно продавать и как отдельную экскурсию из Паттайи — он есть в программах большинства туров.</div>
+  </div>
+  <figure class="shot"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Grand_Palace_Bangkok_Thailand.jpg?width=1200" alt="Grand Palace — Королевский дворец Бангкока" loading="lazy" onerror="this.closest('figure').classList.add('img-fail')"><figcaption>Grand Palace — Королевский дворец Бангкока · Фото: Wikimedia Commons</figcaption></figure>
+ </div>
+</section>
+
+<section class="slide">
+ <h2>Таиланд: Паттайя</h2>
+ <div class="cards cols2">
+  <div class="card"><div class="term">Классика города</div><p>Обзорная экскурсия, сад Нонг-Нуч, Мини-Сиам, Pattaya Park, Tiger Zoo, плавучий рынок, Walking Street.</p></div>
+  <div class="card"><div class="term">Шоу</div><p>«Альказар» и «Тиффани» — знаменитые вечерние шоу Паттайи; Храм Истины на берегу.</p></div>
+  <div class="card"><div class="term">Выезды</div><p>Бангкок, Камбоджа (Ангкор), река Квай, ближайшие острова.</p></div>
+  <div class="card"><div class="term">Для продажи</div><p>Паттайя — универсальная база: пляж, экскурсии и ночная жизнь в одном продукте.</p></div>
+ </div>
+</section>
+
+<section class="slide">
+ <h2>Таиланд: Пхукет</h2>
+ <div class="two-col">
+  <div>
+   <ul class="plain">
+    <li>Острова <b>Пхи-Пхи Дон</b>, Краби, остров Джеймса Бонда, Симиланские острова.</li>
+    <li>Шоу «Фантазия», звериные фермы.</li>
+    <li>Экскурсии в Малайзию и Сингапур.</li>
+    <li>Bangla Road — центр вечерней жизни.</li>
+    <li>Статуя Большого Будды и храм с панорамной площадкой.</li>
+   </ul>
+  </div>
+  <figure class="shot"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Maya_Bay_-_panoramio.jpg?width=1200" alt="Бухта Майя, острова Пхи-Пхи" loading="lazy" onerror="this.closest('figure').classList.add('img-fail')"><figcaption>Бухта Майя, острова Пхи-Пхи · Фото: Wikimedia Commons</figcaption></figure>
+ </div>
+</section>
+
+<section class="slide">
+ <h2>Практикум и домашние задания</h2>
+ <ol class="timeline">
+  <li><span class="n">1</span><span>Рассказ о Турции<small>направление «языком продажи»: кому, зачем, почему именно туда</small></span></li>
+  <li><span class="n">2</span><span>Презентация отеля<small>выбранный отель одного из курортов Турции</small></span></li>
+  <li><span class="n">3</span><span>Различие курортов Турции<small>Кемер / Сиде / Белек / Аланья — кому что предложить</small></span></li>
+  <li><span class="n">4</span><span>Подбор тура по запросу туриста<small>поиск, бронирование, мониторинг цен — на реальной системе</small></span></li>
+  <li><span class="n">5</span><span>Что посмотреть в Таиланде?<small>экскурсионная карта по Бангкоку, Паттайе и Пхукету</small></span></li>
+ </ol>
+</section>
+
+<section class="slide conclusion">
+ <h2>Что уносим с собой</h2>
+ <ul class="plain">
+  <li>Турист уезжает с полным пакетом: паспорта, билеты, полисы, ваучеры — и памяткой по каждому этапу пути.</li>
+  <li>Аэропорт считаем заранее: регистрация 2–3 часа, конец — за 40 минут (у лоукостов — за час), посадка — за 20 минут.</li>
+  <li>По прилёте: паспортный контроль → стойка туроператора → трансфер; в отеле — заселение после 14:00, выезд до 12:00.</li>
+  <li>Медицина работает только через звонок в ассистанс по телефонам из полиса.</li>
+  <li>Курорт подбираем под туриста: Кемер — горы и пинии, Сиде — античность и песок, Белек — люкс и гольф, Аланья — крепость и пляжи.</li>
+  <li>Направление подбираем по сезону — и оператора проверяем в реестре.</li>
+ </ul>
+ <div class="note">Следующая лекция — №7, заключительный урок: повторение этапов продаж и итоговый тест.</div>
+</section>
+<div class="nav">
+ <span class="count" id="count">1 / 25</span>
+ <button id="prev" aria-label="Назад">←</button>
+ <button id="next" aria-label="Вперёд">→</button>
+</div>
+</div>
+<script>
+(function(){
+var stage=document.getElementById('stage');
+var slides=Array.prototype.slice.call(document.querySelectorAll('section.slide'));
+var dotsBox=document.getElementById('dots');
+slides.forEach(function(s,i){
+ var d=document.createElement('button');d.className='dot';d.setAttribute('aria-label','Слайд '+(i+1));
+ d.addEventListener('click',function(){go(i)});dotsBox.appendChild(d);
+});
+var dots=Array.prototype.slice.call(dotsBox.children);
+var idx=0;
+function go(i){
+ idx=Math.max(0,Math.min(slides.length-1,i));
+ slides.forEach(function(s,k){s.classList.toggle('active',k===idx)});
+ dots.forEach(function(d,k){d.classList.toggle('active',k===idx)});
+ document.getElementById('count').textContent=(idx+1)+' / '+slides.length;
+}
+document.getElementById('prev').addEventListener('click',function(){go(idx-1)});
+document.getElementById('next').addEventListener('click',function(){go(idx+1)});
+document.addEventListener('keydown',function(e){
+ if(['ArrowRight','ArrowDown','PageDown',' '].indexOf(e.key)>=0){e.preventDefault();go(idx+1)}
+ else if(['ArrowLeft','ArrowUp','PageUp'].indexOf(e.key)>=0){e.preventDefault();go(idx-1)}
+ else if(e.key==='Home'){go(0)} else if(e.key==='End'){go(slides.length-1)}
+});
+var STORE='opdps-stage-mode';
+var mode=localStorage.getItem(STORE)||'auto';
+function box(){
+ var b={w:1920,h:1080};
+ if(mode==='43'){b={w:1440,h:1080}}
+ if(mode==='auto'&&window.innerWidth/window.innerHeight<1.5){b={w:1440,h:1080}}
+ return b;
+}
+function fit(){
+ var b=box(); stage.style.width=b.w+'px'; stage.style.height=b.h+'px';
+ var sx=window.innerWidth/b.w, sy=window.innerHeight/b.h;
+ var t;
+ if(mode==='fill'){t='translate(-50%,-50%) scale('+sx+','+sy+')'}
+ else{var k=Math.min(sx,sy);t='translate(-50%,-50%) scale('+k+')'}
+ stage.style.transform=t;
+ Array.prototype.forEach.call(document.querySelectorAll('.modebar button'),function(btn){
+  btn.classList.toggle('active',btn.dataset.mode===mode);
+ });
+}
+Array.prototype.forEach.call(document.querySelectorAll('.modebar button'),function(btn){
+ btn.addEventListener('click',function(){mode=btn.dataset.mode;localStorage.setItem(STORE,mode);fit()});
+});
+window.addEventListener('resize',fit);
+fit(); go(0);
+})();
+</script>
+</body>
+</html>
