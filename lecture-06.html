@@ -31,17 +31,17 @@ text-transform:uppercase;color:var(--muted)}
 .rail .dot{width:11px;height:11px;border-radius:50%;border:2px solid var(--gold);background:transparent;
 cursor:pointer;transition:background .25s}
 .rail .dot.active{background:var(--gold)}
-.modebar{position:absolute;right:26px;top:24px;display:flex;gap:8px;z-index:5}
+.modebar{position:fixed;right:22px;top:20px;display:flex;gap:8px;z-index:50}
 .modebar button{font-size:14px;letter-spacing:1px;padding:8px 14px;border-radius:20px;cursor:pointer;
-border:1px solid var(--line);background:transparent;color:var(--muted);transition:all .2s}
+border:1px solid var(--line);background:rgba(5,8,15,.55);color:var(--muted);transition:all .2s}
 .modebar button.active{color:#0d1626;background:var(--gold);border-color:var(--gold)}
 .nav{position:absolute;right:40px;bottom:30px;display:flex;align-items:center;gap:18px;z-index:5}
 .nav .count{font-size:17px;color:var(--muted);letter-spacing:2px}
 .nav button{width:52px;height:52px;border-radius:50%;border:1px solid var(--line);cursor:pointer;
 background:rgba(255,255,255,.04);color:var(--soft);font-size:21px;transition:all .2s}
 .nav button:hover{background:var(--gold);color:#0d1626}
-a.close{position:absolute;left:120px;top:26px;font-size:15px;letter-spacing:2px;text-transform:uppercase;
-color:var(--muted);text-decoration:none;border:1px solid var(--line);border-radius:20px;padding:8px 16px}
+a.close{position:fixed;left:24px;top:20px;z-index:50;font-size:15px;letter-spacing:2px;text-transform:uppercase;
+color:var(--muted);text-decoration:none;border:1px solid var(--line);border-radius:20px;padding:9px 18px;background:rgba(5,8,15,.55)}
 a.close:hover{color:var(--soft);border-color:var(--gold)}
 .cards{display:grid;gap:22px}
 .cols2{grid-template-columns:1fr 1fr}.cols3{grid-template-columns:1fr 1fr 1fr}.cols4{grid-template-columns:repeat(4,1fr)}
@@ -87,7 +87,6 @@ ul.plain li::before{content:"▸";position:absolute;left:0;color:var(--gold)}
 </style>
 </head>
 <body>
-<div id="stage">
 <a class="close" href="index.html">← Все лекции</a>
 <div class="modebar">
  <button data-mode="auto">Авто</button>
@@ -95,6 +94,7 @@ ul.plain li::before{content:"▸";position:absolute;left:0;color:var(--gold)}
  <button data-mode="43">4:3</button>
  <button data-mode="fill">Заполнить</button>
 </div>
+<div id="stage">
 <nav class="rail" aria-label="Навигация по слайдам">
  <div class="label">Лекция 06 · Международный туризм</div>
  <div class="dots" id="dots"></div>
@@ -242,7 +242,7 @@ ul.plain li::before{content:"▸";position:absolute;left:0;color:var(--gold)}
   <div class="card"><div class="term">Море</div><p>Средиземное и Эгейское — одни из самых солёных морей мира.</p></div>
   <div class="card"><div class="term">«Всё включено»</div><p>Понятная и предсказуемая система питания и обслуживания.</p></div>
   <div class="card"><div class="term">Анимация</div><p>Активная дневная и вечерняя программа в отелях.</p></div>
-  <div class="card"><div class="term">Экспурсии</div><p>Обширная программа: от древних городов до Памуккале.</p></div>
+  <div class="card"><div class="term">Экскурсии</div><p>Обширная программа: от древних городов до Памуккале.</p></div>
   <div class="card"><div class="term">Цены</div><p>Доступная ценовая политика при развитой инфраструктуре курортов.</p></div>
   <div class="card"><div class="term">Отельная база</div><p>От скромных трёх звёзд до люксовых резортов.</p></div>
   <div class="card"><div class="term">Шопинг и кухня</div><p>Торговля, турецкие сладости и национальная кухня.</p></div>
@@ -362,17 +362,9 @@ ul.plain li::before{content:"▸";position:absolute;left:0;color:var(--gold)}
 <section class="slide">
  <h2>Туроператоры и форматы туров</h2>
  <div class="cards cols3">
-  <div class="card"><div class="term">Пакетные туры</div><p>Готовый турпродукт туроператора: перелёт + размещение (часто + трансфер и страховка).</p></div>
-  <div class="card"><div class="term">Индивидуальные туры</div><p>Собираются под запрос туриста; FIT — работа с индивидуальным туристом вне пакета.</p></div>
-  <div class="card"><div class="term">Экзотика</div><p>Мексика, Мальдивы, Доминикана, Куба — вылеты из Москвы. <b>Важно: стыковки рейсов!</b></p></div>
+  <div class="card"><div class="term">Пакетный турпродукт туроператора: перелёт + размещение (часто + трансфер и страховка).</div><p></p></div>
  </div>
- <div class="cards cols4">
-  <div class="card"><div class="term">Турция, Таиланд</div><p>Широкий круг операторов, включая крупнейших на рынке.</p></div>
-  <div class="card"><div class="term">ОАЭ, Египет</div><p>Отдельные специализированные и массовые операторы.</p></div>
-  <div class="card"><div class="term">Греция, Испания, Италия, Чехия, Кипр</div><p>Профильные европейские операторы.</p></div>
-  <div class="card"><div class="term">Вьетнам, Китай, Мальдивы</div><p>Часть программ — с вылетом через Новосибирск.</p></div>
- </div>
- <p class="dim">Состав операторов по направлениям — учебный список из конспекта лекции; перед работой проверяйте оператора в Едином федеральном реестре туроператоров.</p>
+</section>
 </section>
 
 <section class="slide">
