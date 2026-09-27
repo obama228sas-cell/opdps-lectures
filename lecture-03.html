@@ -33,7 +33,7 @@ body{
   background:transparent; cursor:pointer; opacity:.45; padding:0; transition:.15s;}
 .dot:hover{opacity:.85}
 .dot.active{background:var(--gold); opacity:1; box-shadow:0 0 10px rgba(212,169,78,.6)}
-.modebar{position:absolute; left:118px; bottom:24px; z-index:50; display:flex; gap:8px;}
+.modebar{position:fixed; right:22px; top:20px; z-index:60; display:flex; gap:8px;}
 .modebar button{
   font-family:inherit; font-size:15px; letter-spacing:.06em;
   background:rgba(19,32,56,.85); color:var(--ink-dim);
@@ -48,11 +48,10 @@ body{
   border:1px solid var(--line); border-radius:8px; padding:10px 22px; cursor:pointer; transition:.15s;}
 .nav button:hover:not(:disabled){border-color:var(--gold); color:#fff}
 .nav button:disabled{opacity:.3; cursor:default}
-.close{
-  position:absolute; right:34px; top:24px; z-index:50; text-decoration:none;
-  width:46px; height:46px; display:flex; align-items:center; justify-content:center;
-  font-size:22px; color:var(--gold-soft); background:rgba(19,32,56,.85);
-  border:1px solid var(--line); border-radius:10px; transition:.15s;}
+a.close{position:fixed; left:24px; top:20px; z-index:60; text-decoration:none;
+  display:inline-block; font-size:15px; letter-spacing:.12em; text-transform:uppercase;
+  color:var(--ink-dim); background:rgba(6,10,18,.6); border:1px solid var(--line);
+  border-radius:20px; padding:9px 18px;}
 .close:hover{border-color:var(--gold); color:#fff}
 .slide{
   position:absolute; inset:0; padding:78px 120px 110px 200px;
@@ -114,6 +113,14 @@ ol.timeline li i{display:block; font-style:normal; color:var(--ink-dim); font-si
 </style>
 </head>
 <body>
+<a class="close" href="index.html" title="К списку лекций">← Все лекции</a>
+<div class="modebar" id="modebar">
+    <button data-mode="auto">Авто</button>
+    <button data-mode="16:9">16:9</button>
+    <button data-mode="4:3">4:3</button>
+    <button data-mode="fill">Заполнить</button>
+  </div>
+
 <div id="stage">
 
   <section class="slide title active">
@@ -424,12 +431,6 @@ ol.timeline li i{display:block; font-style:normal; color:var(--ink-dim); font-si
     <div class="dots" id="dots"></div>
   </div>
 
-  <div class="modebar" id="modebar">
-    <button data-mode="auto">Авто</button>
-    <button data-mode="16:9">16:9</button>
-    <button data-mode="4:3">4:3</button>
-    <button data-mode="fill">Заполнить</button>
-  </div>
 
   <div class="nav">
     <div class="count" id="count">1 / 22</div>
@@ -437,7 +438,6 @@ ol.timeline li i{display:block; font-style:normal; color:var(--ink-dim); font-si
     <button id="next">Вперёд ▶</button>
   </div>
 
-  <a class="close" href="index.html" title="К списку лекций">✕</a>
 </div>
 
 <script>
