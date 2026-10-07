@@ -33,7 +33,7 @@ body{
   background:transparent; cursor:pointer; opacity:.45; padding:0; transition:.15s;}
 .dot:hover{opacity:.85}
 .dot.active{background:var(--gold); opacity:1; box-shadow:0 0 10px rgba(212,169,78,.6)}
-.modebar{position:fixed; right:22px; top:20px; z-index:60; display:flex; gap:8px;}
+.modebar{position:fixed; right:74px; top:20px; z-index:60; display:flex; gap:8px;}
 .modebar button{
   font-family:inherit; font-size:15px; letter-spacing:.06em;
   background:rgba(19,32,56,.85); color:var(--ink-dim);
@@ -48,10 +48,10 @@ body{
   border:1px solid var(--line); border-radius:8px; padding:10px 22px; cursor:pointer; transition:.15s;}
 .nav button:hover:not(:disabled){border-color:var(--gold); color:#fff}
 .nav button:disabled{opacity:.3; cursor:default}
-a.close{position:fixed; left:24px; top:20px; z-index:60; text-decoration:none;
-  display:inline-block; font-size:15px; letter-spacing:.12em; text-transform:uppercase;
-  color:var(--ink-dim); background:rgba(6,10,18,.6); border:1px solid var(--line);
-  border-radius:20px; padding:9px 18px;}
+a.close{position:fixed; right:18px; top:18px; z-index:70; text-decoration:none;
+  width:46px; height:46px; display:flex; align-items:center; justify-content:center;
+  font-size:22px; color:var(--gold-soft); background:rgba(19,32,56,.85);
+  border:1px solid var(--line); border-radius:10px; transition:.15s;}
 .close:hover{border-color:var(--gold); color:#fff}
 .slide{
   position:absolute; inset:0; padding:78px 120px 110px 200px;
@@ -113,15 +113,14 @@ ol.timeline li i{display:block; font-style:normal; color:var(--ink-dim); font-si
 </style>
 </head>
 <body>
-<a class="close" href="index.html" title="К списку лекций">← Все лекции</a>
+<a class="close" href="index.html" title="К списку лекций">✕</a>
+<div id="stage">
 <div class="modebar" id="modebar">
     <button data-mode="auto">Авто</button>
     <button data-mode="16:9">16:9</button>
     <button data-mode="4:3">4:3</button>
     <button data-mode="fill">Заполнить</button>
   </div>
-
-<div id="stage">
 
   <section class="slide title active">
     <div class="kicker">ОПДПС · Организация и планирование деятельности предприятий сервиса</div>
@@ -138,7 +137,7 @@ ol.timeline li i{display:block; font-style:normal; color:var(--ink-dim); font-si
     <ol class="timeline">
       <li>Процесс оказания услуги — основа деятельности предприятия сервиса</li>
       <li>Этапы переговоров о продаже и подготовка к ним<i>по учебному пособию «ТОП-КАДР»</i></li>
-      <li>Установление контакта: уровни восприятия 55/38/7, первое впечатление<i>три простых секрета: улыбка, имя, комплимент</i></li>
+      <li>Установление контакта: уровни восприятия 55/38/7, первое впечатление</li>
       <li>Типология клиентов: структурограмма личности по Штейну<i>синий — зелёный — красный и их комбинации</i></li>
       <li>Продажи в туризме: телефонные переговоры, работа в офисе<i>практикум: продать тур по телефону и в офисе</i></li>
       <li>Оформление тура и работа с клиентом после поездки</li>
@@ -327,7 +326,7 @@ ol.timeline li i{display:block; font-style:normal; color:var(--ink-dim); font-si
   <section class="slide">
     <div class="kicker">Лекция 3 · Продажи</div>
     <h2>Как быть успешным турагентом</h2>
-    <div class="two-col">
+    <div>
       <ul class="thesis">
         <li><b>Знание продукта:</b> страны, курорты, отели, сезонность</li>
         <li><b>Словарь терминов</b> — свободно читает каталоги и ваучеры (Лекция 2)</li>
@@ -336,10 +335,6 @@ ol.timeline li i{display:block; font-style:normal; color:var(--ink-dim); font-si
         <li><b>Дисциплина CRM:</b> задачи, напоминания, история клиента</li>
         <li><b>Деловое общение</b> — отдельная тема следующих занятий</li>
       </ul>
-      <figure class="shot">
-        <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Female%20Hotel%20Receptionist.jpg?width=1200" alt="Менеджер турагентства за работой" onerror="this.closest('figure').classList.add('img-fail')">
-        <figcaption>Рабочее место менеджера по туризму. Фото: Wikimedia Commons</figcaption>
-      </figure>
     </div>
   </section>
 
