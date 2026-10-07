@@ -31,7 +31,7 @@ text-transform:uppercase;color:var(--muted)}
 .rail .dot{width:11px;height:11px;border-radius:50%;border:2px solid var(--gold);background:transparent;
 cursor:pointer;transition:background .25s}
 .rail .dot.active{background:var(--gold)}
-.modebar{position:fixed;right:22px;top:20px;display:flex;gap:8px;z-index:50}
+.modebar{position:fixed;right:74px;top:20px;display:flex;gap:8px;z-index:50}
 .modebar button{font-size:14px;letter-spacing:1px;padding:8px 14px;border-radius:20px;cursor:pointer;
 border:1px solid var(--line);background:rgba(5,8,15,.55);color:var(--muted);transition:all .2s}
 .modebar button.active{color:#0d1626;background:var(--gold);border-color:var(--gold)}
@@ -40,9 +40,9 @@ border:1px solid var(--line);background:rgba(5,8,15,.55);color:var(--muted);tran
 .nav button{width:52px;height:52px;border-radius:50%;border:1px solid var(--line);cursor:pointer;
 background:rgba(255,255,255,.04);color:var(--soft);font-size:21px;transition:all .2s}
 .nav button:hover{background:var(--gold);color:#0d1626}
-a.close{position:fixed;left:24px;top:20px;z-index:50;font-size:15px;letter-spacing:2px;text-transform:uppercase;
-color:var(--muted);text-decoration:none;border:1px solid var(--line);border-radius:20px;padding:9px 18px;background:rgba(5,8,15,.55)}
-a.close:hover{color:var(--soft);border-color:var(--gold)}
+a.close{position:fixed;right:18px;top:18px;z-index:70;font-size:22px;text-decoration:none;
+color:var(--soft);background:rgba(5,8,15,.55);border:1px solid var(--line);border-radius:10px;width:46px;height:46px;display:flex;align-items:center;justify-content:center;transition:.15s}
+a.close:hover{border-color:var(--gold);color:#fff}
 .cards{display:grid;gap:22px}
 .cols2{grid-template-columns:1fr 1fr}.cols3{grid-template-columns:1fr 1fr 1fr}.cols4{grid-template-columns:repeat(4,1fr)}
 .card{background:var(--card);border:1px solid rgba(212,169,78,.16);border-radius:14px;padding:24px 26px}
@@ -87,14 +87,14 @@ ul.plain li::before{content:"▸";position:absolute;left:0;color:var(--gold)}
 </style>
 </head>
 <body>
-<a class="close" href="index.html">← Все лекции</a>
+<a class="close" href="index.html" title="К списку лекций">✕</a>
+<div id="stage">
 <div class="modebar">
  <button data-mode="auto">Авто</button>
  <button data-mode="169">16:9</button>
  <button data-mode="43">4:3</button>
  <button data-mode="fill">Заполнить</button>
 </div>
-<div id="stage">
 <nav class="rail" aria-label="Навигация по слайдам">
  <div class="label">Лекция 06 · Международный туризм</div>
  <div class="dots" id="dots"></div>
