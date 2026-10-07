@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang='ru'>
+<head>
+<meta charset='UTF-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0'>
+<title>Лекция 4 · Деловое общение. Управление персоналом — ОПДПС</title>
+<style>
+:root{
+  --bg:#0a1120; --bg2:#101c33; --panel:#132038;
+  --gold:#d4a94e; --gold-soft:#e8c979;
+  --ink:#ece1c9; --ink-dim:#a9b4c6;
+  --line:rgba(212,169,78,.30);
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  background:#04070d; position:fixed; inset:0; overflow:hidden;
+  font-family:'Segoe UI',Roboto,Arial,sans-serif; color:var(--ink);
+}
+#stage{
+  position:absolute; left:50%; top:50%; width:1920px; height:1080px;
+  transform-origin:center center;
+  background:radial-gradient(1200px 700px at 82% -10%, #1a2c52 0%, #0d1626 55%, #070d1a 100%);
+  overflow:hidden;
+}
+.rail{position:absolute; left:0; top:0; bottom:0; width:96px; z-index:40;
+  display:flex; flex-direction:column; align-items:center; padding:26px 0; gap:16px;
+  border-right:1px solid var(--line); background:rgba(6,10,18,.38);}
+.rail .vlabel{writing-mode:vertical-rl; transform:rotate(180deg);
+  font-size:17px; letter-spacing:.34em; color:var(--gold); text-transform:uppercase;}
+.dots{flex:1; display:flex; flex-direction:column; justify-content:center; gap:6px;}
+.dot{width:10px; height:10px; border-radius:50%; border:2px solid var(--gold);
+  background:transparent; cursor:pointer; opacity:.45; padding:0; transition:.15s;}
+.dot:hover{opacity:.85}
+.dot.active{background:var(--gold); opacity:1; box-shadow:0 0 10px rgba(212,169,78,.6)}
+.modebar{position:fixed; right:74px; top:20px; z-index:60; display:flex; gap:8px;}
+.modebar button{
+  font-family:inherit; font-size:15px; letter-spacing:.06em;
+  background:rgba(19,32,56,.85); color:var(--ink-dim);
+  border:1px solid var(--line); border-radius:8px; padding:8px 14px; cursor:pointer; transition:.15s;}
+.modebar button:hover{color:var(--ink); border-color:var(--gold)}
+.modebar button.on{color:#0a1120; background:var(--gold); border-color:var(--gold); font-weight:700;}
+.nav{position:absolute; right:42px; bottom:24px; z-index:50; display:flex; align-items:center; gap:16px;}
+.nav .count{font-size:17px; color:var(--ink-dim); letter-spacing:.08em; min-width:80px; text-align:center;}
+.nav button{
+  font-family:inherit; font-size:16px; font-weight:600; letter-spacing:.1em;
+  background:rgba(19,32,56,.85); color:var(--gold-soft);
+  border:1px solid var(--line); border-radius:8px; padding:10px 22px; cursor:pointer; transition:.15s;}
+.nav button:hover:not(:disabled){border-color:var(--gold); color:#fff}
+.nav button:disabled{opacity:.3; cursor:default}
+a.close{position:fixed; right:18px; top:18px; z-index:70; text-decoration:none;
+  width:46px; height:46px; display:flex; align-items:center; justify-content:center;
+  font-size:22px; color:var(--gold-soft); background:rgba(19,32,56,.85);
+  border:1px solid var(--line); border-radius:10px; transition:.15s;}
+.close:hover{border-color:var(--gold); color:#fff}
+.slide{
+  position:absolute; inset:0; padding:78px 120px 110px 200px;
+  display:flex; flex-direction:column; justify-content:center;
+  opacity:0; visibility:hidden; transform:translateY(14px);
+  transition:opacity .35s, transform .35s, visibility .35s; pointer-events:none;}
+.slide.active{opacity:1; visibility:visible; transform:none; pointer-events:auto;}
+.kicker{font-size:19px; letter-spacing:.3em; color:var(--gold); text-transform:uppercase;
+  font-weight:600; margin-bottom:14px;}
+.slide h2{font-family:Georgia,'Times New Roman',serif; font-size:46px; line-height:1.15;
+  color:#f4ead2; margin:0 0 26px; font-weight:400;}
+.slide h2::after{content:''; display:block; width:90px; height:3px; background:var(--gold); margin-top:18px;}
+p.lead{font-size:23px; color:#cfc4a8; line-height:1.5; margin:0 0 18px;}
+ul.thesis{margin:0; padding-left:24px; font-size:23px; line-height:1.55;}
+ul.thesis li{margin-bottom:14px;}
+ul.thesis li::marker{color:var(--gold);}
+ul.thesis b{color:var(--gold-soft); font-weight:600;}
+.two-col{display:grid; grid-template-columns:1.25fr 1fr; gap:56px; align-items:center;}
+figure.shot{margin:0; border:1px solid var(--line); border-radius:14px; overflow:hidden;
+  box-shadow:0 24px 60px rgba(0,0,0,.45); background:var(--panel); position:relative;}
+figure.shot img{display:block; width:100%; max-height:560px; object-fit:cover;}
+figure.shot figcaption{font-size:15px; color:var(--ink-dim); padding:10px 16px;}
+figure.shot.img-fail img{display:none}
+figure.shot.img-fail::before{content:'Иллюстрация недоступна'; display:flex; height:400px;
+  align-items:center; justify-content:center; color:var(--ink-dim); font-size:19px;}
+.cards{display:grid; gap:18px;}
+.cards.cols2{grid-template-columns:repeat(2,1fr);}
+.cards.cols3{grid-template-columns:repeat(3,1fr);}
+.cards.cols4{grid-template-columns:repeat(4,1fr);}
+.card{background:rgba(255,255,255,.045); border:1px solid var(--line); border-radius:12px; padding:18px 22px;}
+.card .term{display:block; color:var(--gold); font-size:22px; font-weight:700; margin-bottom:5px; letter-spacing:.02em;}
+.card p{margin:0; font-size:19px; line-height:1.42; color:#ded3ba;}
+.compare{display:grid; grid-template-columns:1fr 1fr; gap:28px;}
+.compare .side{background:rgba(255,255,255,.045); border:1px solid var(--line); border-radius:14px; padding:26px 30px;}
+.compare .side h3{font-family:Georgia,serif; font-size:26px; color:var(--gold-soft); margin:0 0 14px; font-weight:400;}
+.compare ul{margin:0; padding-left:22px; font-size:21px; line-height:1.5;}
+.compare li{margin-bottom:9px;} .compare li::marker{color:var(--gold);}
+ol.timeline{list-style:none; margin:0; padding:0; counter-reset:step; max-width:1250px;}
+ol.timeline li{position:relative; padding:2px 0 22px 56px; font-size:24px; line-height:1.45;}
+ol.timeline li::before{counter-increment:step; content:counter(step);
+  position:absolute; left:0; top:0; width:36px; height:36px; border:1px solid var(--gold); border-radius:50%;
+  color:var(--gold); display:flex; align-items:center; justify-content:center; font-size:17px; font-weight:700;}
+ol.timeline li i{display:block; font-style:normal; color:var(--ink-dim); font-size:19px; margin-top:4px;}
+.stats{display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:22px; margin-bottom:26px;}
+.stat{background:rgba(255,255,255,.045); border:1px solid var(--line); border-radius:14px; padding:26px; text-align:center;}
+.stat .num{font-family:Georgia,serif; font-size:52px; color:var(--gold); line-height:1;}
+.stat .lbl{font-size:20px; color:#ded3ba; margin-top:12px; line-height:1.4;}
+.code{font-family:'Cascadia Code',Consolas,'Courier New',monospace; background:#0b1526;
+  border:1px solid var(--line); border-radius:10px; padding:16px 20px; font-size:21px; color:#cfe0ff; margin-top:14px;}
+.note{border-left:4px solid var(--gold); background:rgba(212,169,78,.08);
+  padding:18px 24px; font-size:21px; line-height:1.5; border-radius:0 10px 10px 0; margin-top:24px;}
+.slide.title .kicker{font-size:21px; margin-bottom:22px;}
+.slide.title h1{font-family:Georgia,'Times New Roman',serif; font-size:72px; line-height:1.12;
+  color:#f4ead2; margin:0 0 26px; font-weight:400; max-width:1400px;}
+.slide.title .sub{font-size:26px; color:#cfc4a8; line-height:1.55; margin:0 0 34px;}
+.slide.title .author{font-size:20px; color:var(--gold-soft); letter-spacing:.06em;}
+.slide.title .hint{margin-top:52px; font-size:16px; color:var(--ink-dim); letter-spacing:.05em;}
+.slide.conclusion .note{font-size:22px;}
+</style>
+</head>
+<body>
+<a class='close' href='index.html' title='К списку лекций'>✕</a>
+<div id='stage'>
+<div class='modebar' id='modebar'>
+    <button data-mode='auto'>Авто</button>
+    <button data-mode='16:9'>16:9</button>
+    <button data-mode='4:3'>4:3</button>
+    <button data-mode='fill'>Заполнить</button>
+  </div>
+
+<section class='slide title active'>
+<div class='kicker'>ОПДПС · Организация и планирование деятельности предприятий сервиса</div>
+<h1>Лекция 4.<br>Деловое общение.<br>Управление персоналом</h1>
+<p class='sub'>Культура общения и имидж · Аттракция · Позиции в общении · Подбор и мотивация персонала · Должностная инструкция менеджера · Контроль и отчётность</p>
+<div class='author'>По материалам Н. Ю. Гребенниковой</div>
+<div class='hint'>Навигация: клавиши ← → · точки слева · 35 экранов</div>
+</section>
+
+<section class='slide'>
+<div class='kicker'>Лекция 4 · План</div>
+<h2>Что разберём сегодня</h2>
+<ol class='timeline'>
+<li>Деловое общение: понятие, культура общения, деловой имидж</li>
+<li>Коммуникативные навыки и качества сотрудника<i>эмпатия, эмоциональная зрелость, стрессоустойчивость</i></li>
+<li>Профессиональное поведение и критика</li>
+<li>Аттракция и внешние характеристики профессионального менеджера</li>
+<li>Позиции в общении и эго-состояния</li>
+<li>Управление персоналом: отбор, адаптация, обучение, мотивация</li>
+<li>Должностная инструкция менеджера турагентства, контроль и отчётность</li>
+</ol>
+</section>
+
+<section class='slide'>
+<div class='kicker'>Лекция 4 · Деловое общение</div>
+<h2>Понятие делового общения</h2>
+<div class='two-col'>
+<ul class='thesis'>
+<li>Многогранный процесс установления и развития контактов между людьми, порождённый потребностями совместной деятельности</li>
+<li>Включает обмен информацией, идеями, чувствами</li>
+<li>Включает восприятие и понимание другого человека</li>
+<li>Цель — выработка <b>единой стратегии взаимодействия</b></li>
+</ul>
+<figure class='shot'>
+<img src='https://commons.wikimedia.org/wiki/Special:FilePath/Business%20agreement%20handshake%20at%20coffee%20shop.jpg?width=1200' alt='Деловое общение' onerror="this.closest('figure').classList.add('img-fail')">
+<figcaption>Деловое общение. Фото: Wikimedia Commons</figcaption>
+</figure>
+</div>
+</section>
+
+<section class='slide'>
+<div class='kicker'>Лекция 4 · Деловое общение</div>
+<h2>Культура общения и деловой имидж</h2>
+<div class='compare'>
+<div class='side'><h3>Культура общения</h3><ul><li>Система знаний и навыков тактического поведения в различных ситуациях общения</li><li>Выражается в стиле общения</li><li>Требует владения внешними манерами поведения и коммуникативными умениями</li><li>Выразительность и нестандартность средств общения</li></ul></div>
+<div class='side'><h3>Деловой имидж</h3><ul><li>Опрятный, приятный, но неброский внешний вид</li><li>Умение держаться в деловой и неформальной обстановке</li><li>Внятная, грамотная речь</li><li>Умение поддерживать хорошее настроение себе и другим</li></ul></div>
+</div>
+</section>
+
+<section class='slide'>
+<div class='kicker'>Лекция 4 · Коммуникативные навыки</div>
+<h2>Психологические коммуникативные навыки</h2>
+<div class='cards cols2'>
+<div class='card'><span class='term'>Ориентироваться в людях</span><p>умение разбираться в человеке и в группах</p></div>
+<div class='card'><span class='term'>Личный авторитет</span><p>сформировать свой имидж и стиль</p></div>
+<div class='card'><span class='term'>Влиять и убеждать</span><p>умение воздействовать на людей, убеждать их</p></div>
+<div class='card'><span class='term'>Организовать взаимодействие подчинённых</span><p>чтобы это привело к удовлетворённости и эффективности совместной деятельности</p></div>
+</div>
+</section>
+
+<section class='slide'>
+<div class='kicker'>Лекция 4 · Качества сотрудника</div>
+<h2>Эмпатия и рефлексия</h2>
+<div class='compare'>
+<div class='side'><h3>Эмпатия</h3><ul><li>Умение отозваться на чужую радость и боль</li><li>Сочувствие, сопереживание</li></ul></div>
+<div class='side'><h3>Рефлексия</h3><ul><li>Способность размышлять за другого</li><li>Мысленно поставить себя в ситуацию другого человека и думать с его точки зрения</li><li>«Ходить в чужих ботинках», гибкость</li></ul></div>
+</div>
+</section>
+
+<section class='slide'>
+<div class='kicker'>Лекция 4 · Качества сотрудника</div>
+<h2>Образ «Я», направленность, порог гнева</h2>
+<div class='cards cols2'>
+<div class='card'><span class='term'>Какой я для других</span><p>как меня воспринимают окружающие</p></div>
+<div class='card'><span class='term'>Как я вижу себя сам</span><p>собственный образ «Я»</p></div>
+<div class='card'><span class='term'>Направленность на лучшее</span><p>формируем направленность на лучшие качества человека</p></div>
+<div class='card'><span class='term'>Свой порог гнева</span><p>знать, где он проходит, и контролировать его</p></div>
+</div>
+</section>
+
+<section class='slide'>
+<div class='kicker'>Лекция 4 · Качества сотрудника</div>
+<h2>Умение управлять собой: эмоциональная зрелость</h2>
+<div class='cards cols4'>
+<div class='card'><span class='term'>Здоровье</span><p>поддержание физического здоровья</p></div>
+<div class='card'><span class='term'>Нагрузки</span><p>умение балансировать нагрузки</p></div>
+<div class='card'><span class='term'>Силы</span><p>рационально распределять и накапливать энергию</p></div>
+<div class='card'><span class='term'>Чувства</span><p>не бояться переживать, признавать и выражать их</p></div>
+<div class='card'><span class='term'>Неудачи</span><p>спокойно принимать, учиться на ошибках</p></div>
+<div class='card'><span class='term'>Самооценка</span><p>оценить, чего вы стоите; оптимист и пессимист</p></div>
+<div class='card'><span class='term'>Неодобрение</span><p>способность переносить неодобрение и нелюбовь к себе</p></div>
+<div class='card'><span class='term'>Вызовы</span><p>принимать не каждый вызов — не опускаться до уровня провокатора</p></div>
+</div>
+</section>
+
+<section class='slide'>
+<div class='kicker'>Лекция 4 · Качества сотрудника</div>
+<h2>Стрессоустойчивость</h2>
+<div class='stats'>
+<div class='stat'><div class='num'>1</div><div class='lbl'>фаза тревоги</div></div>
+<div class='stat'><div class='num'>2</div><div class='lbl'>фаза сопротивления</div></div>
+<div class='stat'><div class='num'>3</div><div class='lbl'>фаза истощения</div></div>
+</div>
+<div class='note'>Формула выживания на неделю: (время отдыха + время релакса, снятия напряжения, аутотренингов + время катарсиса — физического и духовного очищения) / (время суток − время сна).</div>
+</section>
+
+<section class='slide'>
+<div class='kicker'>Лекция 4 · Профессиональное поведение</div>
+<h2>Профессиональное поведение при общении</h2>
+<div class='cards cols3'>
+<div class='card'><span class='term'>Доброжелательность</span><p>поведение отвечает доброжелательности и приветливости</p></div>
+<div class='card'><span class='term'>Любезность</span><p>быть любезным с клиентом и коллегами</p></div>
+<div class='card'><span class='term'>Тактичность</span><p>быть тактичным в любой ситуации</p></div>
+</div>
+<div class='note'>Визуальное оформление внешности — часть профессионального поведения: клиент оценивает менеджера ещё до первых слов.</div>
+</section>
+
+<section class='slide'>
+<div class='kicker'>Лекция 4 · Критика</div>
+<h2>Как сделать замечание своему сотруднику</h2>
+<ol class='timeline'>
+<li>Похвала</li>
+<li>Ещё одна похвала</li>
+<li>Ввод в критику</li>
+<li>Замечание по делу<i>диагностика состояния критикуемого: «плюс-плюс» или «минус-минус»</i></li>
+<li>Мост на сотрудничество<i>либо разрыв отношений</i></li>
+</ol>
+</section>
+
+<section class='slide'>
+<div class='kicker'>Лекция 4 · Критика</div>
+<h2>Правила воздействия</h2>
+<div class='compare'>
+<div class='side'><h3>Правила</h3><ul><li>Критикуем не человека, а его поступки</li><li>Не персонифицируем</li></ul></div>
+<div class='side'><h3>Факторы влияния на человека</h3><ul><li>Личностные качества</li><li>Поведение уверенного в себе человека</li><li>Похвала</li></ul></div>
+</div>
+</section>
+
+<section class='slide'>
+<div class='kicker'>Лекция 4 · Аттракция</div>
+<h2>Аттракция — это симпатия</h2>
+<p class='lead'>Аттракция — привлекательность одного человека для другого. В деловом общении она помогает расположить клиента и коллег и создать основу для сотрудничества.</p>
+<ul class='thesis'>
+<li>Симпатия возникает не случайно — её можно создавать приёмами</li>
+<li>Пять базовых приёмов — на следующем экране</li>
+</ul>
+</section>
+
+<section class='slide'>
+<div class='kicker'>Лекция 4 · Аттракция</div>
+<h2>Пять приёмов создания аттракции</h2>
+<ol class='timeline'>
+<li>Имя собственное</li>
+<li>Терпеливый слушатель</li>
+<li>Золотые слова — комплименты</li>
+<li>Зеркало отношений<i>приятное лицо</i></li>
+<li>Личная жизнь, хобби, увлечения, интересы собеседника</li>
+</ol>
+</section>
+
+<section class='slide'>
+<div class='kicker'>Лекция 4 · Аттракция</div>
+<h2>Золотые слова: как делать комплименты</h2>
+<div class='cards cols3'>
+<div class='card'><span class='term'>Достоинства</span><p>подчёркиваем или немного преувеличиваем достоинства собеседника</p></div>
+<div class='card'><span class='term'>Дежурный комплимент</span><p>о причёске, об одежде</p></div>
+<div class='card'><span class='term'>Деловой комплимент</span><p>о профессиональных качествах и результатах</p></div>
+</div>
+<div class='note'>Приём усиливается на фоне «антикомплимента» себе: отмечаем достоинство собеседника, скромно оценивая своё.</div>
+</section>
+
+<section class='slide'>
+<div class='kicker'>Лекция 4 · Профессиональный менеджмент</div>
+<h2>Внешние характеристики профессионального менеджера</h2>
+<div class='cards cols4'>
+<div class='card'><span class='term'>Уверенность</span><p>в себе и в сфере своей деятельности</p></div>
+<div class='card'><span class='term'>Убедительность</span><p>умение убедить за 3 минуты</p></div>
+<div class='card'><span class='term'>Удивительность</span><p>нестандартное решение, выход из ситуации</p></div>
+<div class='card'><span class='term'>Успешность</span><p>удачливость</p></div>
+<div class='card'><span class='term'>Уважение</span><p>к другой точке зрения</p></div>
+<div class='card'><span class='term'>Уравновешенность</span><p>чувство меры, такт</p></div>
+<div class='card'><span class='term'>Улыбчивость</span><p>открытое и доброжелательное лицо</p></div>
+</div>
+</section>
+
+<section class='slide'>
+<div class='kicker'>Лекция 4 · Позиции в общении</div>
+<h2>Четыре жизненные позиции</h2>
+<div class='cards cols2'>
+<div class='card'><span class='term'>«Я в порядке — Вы в порядке»</span><p>общение наравне — партнёрская позиция</p></div>
+<div class='card'><span class='term'>«Я в порядке — Вы не в порядке»</span><p>позиция превосходства</p></div>
+<div class='card'><span class='term'>«Я не в порядке — Вы не в порядке»</span><p>позиция безнадёжности</p></div>
+<div class='card'><span class='term'>«Я не в порядке — Вы в порядке»</span><p>позиция подчинения</p></div>
+</div>
+<div class='note'>Распознавая позицию собеседника, мы лучше понимаем, как с ним выстроить общение.</div>
+</section>
+
+<section class='slide'>
+<div class='kicker'>Лекция 4 · Позиции в общении</div>
+<h2>Эго-состояния: Родитель, Взрослый, Ребёнок</h2>
+<div class='cards cols3'>
+<div class='card'><span class='term'>Родитель</span><p>контролирует, поучает, оценивает</p></div>
+<div class='card'><span class='term'>Взрослый</span><p>рассуждает, опирается на факты, отвечает за решения</p></div>
+<div class='card'><span class='term'>Ребёнок</span><p>реагирует эмоционально, спонтанно</p></div>
+</div>
+<div class='note'>Эффективное взаимодействие в делах — «Взрослый — Взрослый».</div>
+</section>
+
+<section class='slide'>
+<div class='kicker'>Лекция 4 · Управление персоналом</div>
+<h2>Что такое управление персоналом</h2>
+<p class='lead'>Управление персоналом выражается в <b>отборе и приёме на работу, подготовке и переподготовке персонала</b> в соответствии с потребностями бизнеса.</p>
+<div class='cards cols4'>
+<div class='card'><span class='term'>Поиск и адаптация</span><p>привлечь и ввести в должность</p></div>
+<div class='card'><span class='term'>Обучение и развитие</span><p>подготовка и переподготовка</p></div>
+<div class='card'><span class='term'>Оценка</span><p>деловая оценка результатов</p></div>
+<div class='card'><span class='term'>Мотивация и оплата</span><p>заинтересованность в результате</p></div>
+</div>
+</section>
+
+<section class='slide'>
+<div class='kicker'>Лекция 4 · Управление персоналом</div>
+<h2>Отбор и приём на работу</h2>
+<ol class='timeline'>
+<li>Определение потребности в сотруднике<i>какие функции и какой профиль нужны бизнесу</i></li>
+<li>Поиск кандидатов<i>объявления, рекомендации, профильные учебные заведения</i></li>
+<li>Собеседование<i>знание продукта, коммуникативные навыки, стрессоустойчивость</i></li>
+<li>Испытательный срок<i>проверка в реальной работе</i></li>
+<li>Оформление<i>трудовой договор и должностная инструкция</i></li>
+</ol>
+</section>
+
+<section class='slide'>
+<div class='kicker'>Лекция 4 · Управление персоналом</div>
+<h2>Адаптация нового сотрудника</h2>
+<ul class='thesis'>
+<li>Знакомство с командой, правилами и стандартами агентства</li>
+<li>Закреплённый наставник из опытных менеджеров</li>
+<li>Обучение работе с CRM и каталогами туроператоров</li>
+<li>Отработка сценариев: телефонный разговор, встреча клиента в офисе</li>
+<li>Постепенное увеличение самостоятельности и ответственности</li>
+</ul>
+</section>
+
+<section class='slide'>
+<div class='kicker'>Лекция 4 · Управление персоналом</div>
+<h2>Подготовка и переподготовка персонала</h2>
+<div class='cards cols3'>
+<div class='card'><span class='term'>Продуктовое обучение</span><p>рекламные туры, вебинары и обучающие семинары туроператоров</p></div>
+<div class='card'><span class='term'>Навыки продаж</span><p>тренинги и ролевые игры по этапам переговоров</p></div>
+<div class='card'><span class='term'>Законодательство</span><p>изменения правил выезда, виз, страхования, прав туристов</p></div>
+</div>
+<div class='note'>Рынок туризма меняется быстро: сотрудник, который не учится, быстро теряет квалификацию.</div>
+</section>
+
+<section class='slide'>
+<div class='kicker'>Лекция 4 · Управление персоналом</div>
+<h2>Мотивация персонала</h2>
+<div class='compare'>
+<div class='side'><h3>Материальная</h3><ul><li>Оклад и процент от продаж</li><li>Премии за выполнение плана</li><li>Бонусы по программам туроператоров</li></ul></div>
+<div class='side'><h3>Нематериальная</h3><ul><li>Признание и благодарность</li><li>Обучение и рекламные туры</li><li>Карьерный рост, комфортные условия труда</li></ul></div>
+</div>
+</section>
+
+<section class='slide'>
+<div class='kicker'>Лекция 4 · Управление персоналом</div>
+<h2>Оценка персонала</h2>
+<ul class='thesis'>
+<li>Оцениваем <b>результаты</b>: выполнение плана продаж, качество оформления заявок</li>
+<li>Оцениваем <b>поведение</b>: работа с клиентом, соблюдение стандартов общения</li>
+<li>Источники: отчёты менеджера, отзывы клиентов, прослушивание звонков, наблюдение руководителя</li>
+<li>Итоги оценки — основа для обучения, премирования и карьерных решений</li>
+</ul>
+</section>
+
+<section class='slide'>
+<div class='kicker'>Лекция 4 · Должностная инструкция</div>
+<h2>Должностная инструкция менеджера турагентства</h2>
+<p class='lead'>Документ, который определяет должностные обязанности, права и ответственность менеджера по туризму.</p>
+<div class='cards cols4'>
+<div class='card'><span class='term'>1. Общие положения</span><p>статус должности, подчинение, требования</p></div>
+<div class='card'><span class='term'>2. Обязанности</span><p>что менеджер обязан делать</p></div>
+<div class='card'><span class='term'>3. Права</span><p>что менеджер вправе требовать и предлагать</p></div>
+<div class='card'><span class='term'>4. Ответственность</span><p>за что и перед кем отвечает</p></div>
+</div>
+</section>
+
+<section class='slide'>
+<div class='kicker'>Лекция 4 · Должностная инструкция</div>
+<h2>Общие положения</h2>
+<ul class='thesis'>
+<li>Менеджер по туризму относится к категории специалистов</li>
+<li>Назначается и освобождается приказом руководителя агентства</li>
+<li>Подчиняется непосредственно директору или руководителю отдела продаж</li>
+<li>Знает законодательство о туристской деятельности, права туристов, порядок оформления виз и страхования</li>
+<li>Владеет продуктом: направления, отели, типы размещения и питания, условия туроператоров</li>
+<li>Работает с CRM и системами бронирования</li>
+</ul>
+</section>
+
+<section class='slide'>
+<div class='kicker'>Лекция 4 · Должностная инструкция</div>
+<h2>Обязанности: консультирование клиента</h2>
+<div class='cards cols2'>
+<div class='card'><span class='term'>Подбор вариантов отдыха</span><p>предлагает клиентам имеющиеся варианты, даёт рекомендации по выбору мест отдыха</p></div>
+<div class='card'><span class='term'>Въезд и документы</span><p>порядок въезда и выезда, оформление виз, валютный и таможенный контроль</p></div>
+<div class='card'><span class='term'>Услуги в туре</span><p>транспорт, размещение и питание, экскурсионное обслуживание, маршрут и программа</p></div>
+<div class='card'><span class='term'>Безопасность</span><p>меры личной безопасности, сохранность имущества, условия получения неотложной медицинской помощи</p></div>
+</div>
+</section>
+
+<section class='slide'>
+<div class='kicker'>Лекция 4 · Должностная инструкция</div>
+<h2>Обязанности: продажа и оформление</h2>
+<ol class='timeline'>
+<li>Собирает и анализирует требования клиента к туристическим услугам</li>
+<li>Проводит преддоговорные переговоры и согласует условия договора<i>программа пребывания, размещение, питание, перевозка, дополнительные услуги</i></li>
+<li>Подбирает наиболее выгодные по цене, срокам и качеству предложения туроператоров</li>
+<li>Заключает договор о реализации туристского продукта и оформляет документы<i>договор, ваучер, билеты, страховой полис</i></li>
+</ol>
+</section>
+
+<section class='slide'>
+<div class='kicker'>Лекция 4 · Должностная инструкция</div>
+<h2>Обязанности: работа с туроператорами и клиентской базой</h2>
+<ul class='thesis'>
+<li>Бронирует услуги у туроператоров и следит за подтверждением заявок</li>
+<li>Информирует клиента об изменениях в заявке и сроках оплаты</li>
+<li>Принимает и оформляет претензии туристов, передаёт их туроператору</li>
+<li>Ведёт историю обращений в CRM, фиксирует каждый контакт с клиентом</li>
+<li>Поддерживает связь с клиентом после поездки, собирает отзывы</li>
+</ul>
+</section>
+
+<section class='slide'>
+<div class='kicker'>Лекция 4 · Должностная инструкция</div>
+<h2>Права менеджера</h2>
+<div class='cards cols2'>
+<div class='card'><span class='term'>Знакомиться с документами</span><p>которые определяют права, обязанности и критерии оценки работы</p></div>
+<div class='card'><span class='term'>Вносить предложения</span><p>по совершенствованию работы агентства</p></div>
+<div class='card'><span class='term'>Сообщать о недостатках</span><p>руководителю — о проблемах, выявленных в работе, и предлагать пути их устранения</p></div>
+<div class='card'><span class='term'>Требовать содействия</span><p>руководства в исполнении обязанностей, необходимых условий и информации</p></div>
+</div>
+</section>
+
+<section class='slide'>
+<div class='kicker'>Лекция 4 · Должностная инструкция</div>
+<h2>Ответственность менеджера</h2>
+<div class='cards cols3'>
+<div class='card'><span class='term'>За исполнение</span><p>неисполнение или ненадлежащее исполнение обязанностей — по трудовому законодательству</p></div>
+<div class='card'><span class='term'>За правонарушения</span><p>совершённые в ходе работы — по административному, гражданскому и уголовному законодательству</p></div>
+<div class='card'><span class='term'>За ущерб</span><p>материальный ущерб и ущерб деловой репутации агентства</p></div>
+</div>
+<div class='note'>Отдельно — сохранность персональных данных клиентов и конфиденциальной информации агентства.</div>
+</section>
+
+<section class='slide'>
+<div class='kicker'>Лекция 4 · Контроль и отчётность</div>
+<h2>Контроль и отчётность менеджера</h2>
+<div class='cards cols3'>
+<div class='card'><span class='term'>Ежедневно</span><p>краткий отчёт: звонки и обращения, заявки, оплаты, задачи на завтра</p></div>
+<div class='card'><span class='term'>Еженедельно</span><p>план и факт продаж, воронка клиентов, причины отказов</p></div>
+<div class='card'><span class='term'>Ежемесячно</span><p>сводный отчёт: выручка, выполнение плана, повторные клиенты, претензии</p></div>
+</div>
+<div class='note'>Основа отчётности — дисциплина CRM: если контакта нет в системе, его для руководителя не существует.</div>
+</section>
+
+<section class='slide'>
+<div class='kicker'>Лекция 4 · Контроль и отчётность</div>
+<h2>Показатели работы менеджера</h2>
+<div class='cards cols3'>
+<div class='card'><span class='term'>Количество обращений</span><p>звонки, визиты, заявки из мессенджеров и соцсетей</p></div>
+<div class='card'><span class='term'>Конверсия</span><p>доля обращений, закончившихся продажей</p></div>
+<div class='card'><span class='term'>Средний чек</span><p>средняя стоимость проданного тура</p></div>
+<div class='card'><span class='term'>Выполнение плана</span><p>фактическая выручка к плановой</p></div>
+<div class='card'><span class='term'>Повторные клиенты</span><p>доля клиентов, вернувшихся за новым туром</p></div>
+<div class='card'><span class='term'>Претензии</span><p>число и причины жалоб, скорость их обработки</p></div>
+</div>
+</section>
+
+<section class='slide'>
+<div class='kicker'>Лекция 4 · Самопроверка</div>
+<h2>Вопросы для самопроверки</h2>
+<ol class='timeline'>
+<li>Дайте определение делового общения. Чем культура общения отличается от делового имиджа?</li>
+<li>Какие качества необходимы сотруднику сферы сервиса? Что такое эмпатия и рефлексия?</li>
+<li>Как правильно сделать замечание сотруднику?</li>
+<li>Что такое аттракция? Назовите пять приёмов её создания</li>
+<li>Назовите четыре жизненные позиции и три эго-состояния</li>
+<li>Из каких разделов состоит должностная инструкция менеджера? Какие отчёты он сдаёт?</li>
+</ol>
+</section>
+
+<section class='slide conclusion'>
+<div class='kicker'>Лекция 4 · Итоги</div>
+<h2>Что запомнить</h2>
+<ul class='thesis'>
+<li>Деловое общение — процесс обмена информацией, идеями и чувствами ради единой стратегии взаимодействия</li>
+<li>Деловой имидж, эмпатия, эмоциональная зрелость и стрессоустойчивость — профессиональные качества менеджера</li>
+<li>Критикуем поступки, а не человека; замечание начинаем и заканчиваем позитивом</li>
+<li>Аттракция строится на имени, внимательном слушании, комплиментах и интересе к собеседнику</li>
+<li>Управление персоналом: отбор, адаптация, обучение, мотивация, оценка</li>
+<li>Должностная инструкция: обязанности, права, ответственность; контроль через отчётность и CRM</li>
+</ul>
+<div class='note'>Практика: ролевая игра «замечание сотруднику» · разбор должностной инструкции менеджера своего агентства · составление ежедневного отчёта.</div>
+</section>
+
+<div class='rail'>
+<div class='vlabel'>ОПДПС · Лекция 04</div>
+<div class='dots' id='dots'></div>
+</div>
+
+<div class='nav'>
+<div class='count' id='count'>1 / 35</div>
+<button id='prev'>◀ Назад</button>
+<button id='next'>Вперёд ▶</button>
+</div>
+
+</div>
+
+<script>
+(function(){
+  var stage = document.getElementById('stage');
+  var slides = Array.prototype.slice.call(document.querySelectorAll('.slide'));
+  var dotsBox = document.getElementById('dots');
+  var countEl = document.getElementById('count');
+  var prevBtn = document.getElementById('prev');
+  var nextBtn = document.getElementById('next');
+  var modeKey = 'opdps-stage-mode';
+  var currentMode = localStorage.getItem(modeKey) || 'auto';
+  var idx = 0;
+
+  slides.forEach(function(s, i){
+    var d = document.createElement('button');
+    d.className = 'dot';
+    d.title = 'Экран ' + (i+1);
+    d.addEventListener('click', function(){ show(i); });
+    dotsBox.appendChild(d);
+  });
+  var dots = Array.prototype.slice.call(dotsBox.children);
+
+  function boxFor(mode){
+    if(mode === '16:9') return {w:1920, h:1080};
+    if(mode === '4:3')  return {w:1440, h:1080};
+    if(mode === 'fill') return null;
+    var ar = window.innerWidth / window.innerHeight;
+    return ar < 1.5 ? {w:1440, h:1080} : {w:1920, h:1080};
+  }
+  function apply(){
+    if(currentMode === 'fill'){
+      stage.style.width = '1920px';
+      stage.style.height = '1080px';
+      var sx = window.innerWidth / 1920, sy = window.innerHeight / 1080;
+      stage.style.transform = 'translate(-50%,-50%) scale(' + sx + ',' + sy + ')';
+      return;
+    }
+    var box = boxFor(currentMode);
+    stage.style.width = box.w + 'px';
+    stage.style.height = box.h + 'px';
+    var k = Math.min(window.innerWidth / box.w, window.innerHeight / box.h);
+    stage.style.transform = 'translate(-50%,-50%) scale(' + k + ')';
+  }
+  function setMode(m){
+    currentMode = m;
+    localStorage.setItem(modeKey, m);
+    Array.prototype.forEach.call(document.querySelectorAll('#modebar button'), function(b){
+      b.classList.toggle('on', b.getAttribute('data-mode') === m);
+    });
+    apply();
+  }
+  Array.prototype.forEach.call(document.querySelectorAll('#modebar button'), function(b){
+    b.addEventListener('click', function(){ setMode(b.getAttribute('data-mode')); });
+  });
+
+  function show(i){
+    if(i < 0) i = 0;
+    if(i > slides.length - 1) i = slides.length - 1;
+    slides[idx].classList.remove('active');
+    dots[idx].classList.remove('active');
+    idx = i;
+    slides[idx].classList.add('active');
+    dots[idx].classList.add('active');
+    countEl.textContent = (idx + 1) + ' / ' + slides.length;
+    prevBtn.disabled = idx === 0;
+    nextBtn.disabled = idx === slides.length - 1;
+  }
+  prevBtn.addEventListener('click', function(){ show(idx - 1); });
+  nextBtn.addEventListener('click', function(){ show(idx + 1); });
+  document.addEventListener('keydown', function(e){
+    if(e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === 'PageDown' || e.key === ' ') show(idx + 1);
+    if(e.key === 'ArrowLeft' || e.key === 'ArrowUp' || e.key === 'PageUp') show(idx - 1);
+    if(e.key === 'Home') show(0);
+    if(e.key === 'End') show(slides.length - 1);
+  });
+  window.addEventListener('resize', apply);
+
+  setMode(currentMode);
+  show(0);
+})();
+</script>
+</body>
+</html>
