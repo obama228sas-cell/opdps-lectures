@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang='ru'>
+<head>
+<meta charset='UTF-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0'>
+<title>Лекция 7 · Заключительный урок. Памятка туриста — ОПДПС</title>
+<style>
+:root{
+  --bg:#0a1120; --bg2:#101c33; --panel:#132038;
+  --gold:#d4a94e; --gold-soft:#e8c979;
+  --ink:#ece1c9; --ink-dim:#a9b4c6;
+  --line:rgba(212,169,78,.30);
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  background:#04070d; position:fixed; inset:0; overflow:hidden;
+  font-family:'Segoe UI',Roboto,Arial,sans-serif; color:var(--ink);
+}
+#stage{
+  position:absolute; left:50%; top:50%; width:1920px; height:1080px;
+  transform-origin:center center;
+  background:radial-gradient(1200px 700px at 82% -10%, #1a2c52 0%, #0d1626 55%, #070d1a 100%);
+  overflow:hidden;
+}
+.rail{position:absolute; left:0; top:0; bottom:0; width:96px; z-index:40;
+  display:flex; flex-direction:column; align-items:center; padding:26px 0; gap:16px;
+  border-right:1px solid var(--line); background:rgba(6,10,18,.38);}
+.rail .vlabel{writing-mode:vertical-rl; transform:rotate(180deg);
+  font-size:17px; letter-spacing:.34em; color:var(--gold); text-transform:uppercase;}
+.dots{flex:1; display:flex; flex-direction:column; justify-content:center; gap:6px;}
+.dot{width:10px; height:10px; border-radius:50%; border:2px solid var(--gold);
+  background:transparent; cursor:pointer; opacity:.45; padding:0; transition:.15s;}
+.dot:hover{opacity:.85}
+.dot.active{background:var(--gold); opacity:1; box-shadow:0 0 10px rgba(212,169,78,.6)}
+.modebar{position:fixed; right:74px; top:20px; z-index:60; display:flex; gap:8px;}
+.modebar button{
+  font-family:inherit; font-size:15px; letter-spacing:.06em;
+  background:rgba(19,32,56,.85); color:var(--ink-dim);
+  border:1px solid var(--line); border-radius:8px; padding:8px 14px; cursor:pointer; transition:.15s;}
+.modebar button:hover{color:var(--ink); border-color:var(--gold)}
+.modebar button.on{color:#0a1120; background:var(--gold); border-color:var(--gold); font-weight:700;}
+.nav{position:absolute; right:42px; bottom:24px; z-index:50; display:flex; align-items:center; gap:16px;}
+.nav .count{font-size:17px; color:var(--ink-dim); letter-spacing:.08em; min-width:80px; text-align:center;}
+.nav button{
+  font-family:inherit; font-size:16px; font-weight:600; letter-spacing:.1em;
+  background:rgba(19,32,56,.85); color:var(--gold-soft);
+  border:1px solid var(--line); border-radius:8px; padding:10px 22px; cursor:pointer; transition:.15s;}
+.nav button:hover:not(:disabled){border-color:var(--gold); color:#fff}
+.nav button:disabled{opacity:.3; cursor:default}
+a.close{position:fixed; right:18px; top:18px; z-index:70; text-decoration:none;
+  width:46px; height:46px; display:flex; align-items:center; justify-content:center;
+  font-size:22px; color:var(--gold-soft); background:rgba(19,32,56,.85);
+  border:1px solid var(--line); border-radius:10px; transition:.15s;}
+.close:hover{border-color:var(--gold); color:#fff}
+.slide{
+  position:absolute; inset:0; padding:78px 120px 110px 200px;
+  display:flex; flex-direction:column; justify-content:center;
+  opacity:0; visibility:hidden; transform:translateY(14px);
+  transition:opacity .35s, transform .35s, visibility .35s; pointer-events:none;}
+.slide.active{opacity:1; visibility:visible; transform:none; pointer-events:auto;}
+.kicker{font-size:19px; letter-spacing:.3em; color:var(--gold); text-transform:uppercase;
+  font-weight:600; margin-bottom:14px;}
+.slide h2{font-family:Georgia,'Times New Roman',serif; font-size:46px; line-height:1.15;
+  color:#f4ead2; margin:0 0 26px; font-weight:400;}
+.slide h2::after{content:''; display:block; width:90px; height:3px; background:var(--gold); margin-top:18px;}
+p.lead{font-size:23px; color:#cfc4a8; line-height:1.5; margin:0 0 18px;}
+ul.thesis{margin:0; padding-left:24px; font-size:23px; line-height:1.55;}
+ul.thesis li{margin-bottom:14px;}
+ul.thesis li::marker{color:var(--gold);}
+ul.thesis b{color:var(--gold-soft); font-weight:600;}
+.two-col{display:grid; grid-template-columns:1.25fr 1fr; gap:56px; align-items:center;}
+figure.shot{margin:0; border:1px solid var(--line); border-radius:14px; overflow:hidden;
+  box-shadow:0 24px 60px rgba(0,0,0,.45); background:var(--panel); position:relative;}
+figure.shot img{display:block; width:100%; max-height:560px; object-fit:cover;}
+figure.shot figcaption{font-size:15px; color:var(--ink-dim); padding:10px 16px;}
+figure.shot.img-fail img{display:none}
+figure.shot.img-fail::before{content:'Иллюстрация недоступна'; display:flex; height:400px;
+  align-items:center; justify-content:center; color:var(--ink-dim); font-size:19px;}
+.cards{display:grid; gap:18px;}
+.cards.cols2{grid-template-columns:repeat(2,1fr);}
+.cards.cols3{grid-template-columns:repeat(3,1fr);}
+.cards.cols4{grid-template-columns:repeat(4,1fr);}
+.card{background:rgba(255,255,255,.045); border:1px solid var(--line); border-radius:12px; padding:18px 22px;}
+.card .term{display:block; color:var(--gold); font-size:22px; font-weight:700; margin-bottom:5px; letter-spacing:.02em;}
+.card p{margin:0; font-size:19px; line-height:1.42; color:#ded3ba;}
+.compare{display:grid; grid-template-columns:1fr 1fr; gap:28px;}
+.compare .side{background:rgba(255,255,255,.045); border:1px solid var(--line); border-radius:14px; padding:26px 30px;}
+.compare .side h3{font-family:Georgia,serif; font-size:26px; color:var(--gold-soft); margin:0 0 14px; font-weight:400;}
+.compare ul{margin:0; padding-left:22px; font-size:21px; line-height:1.5;}
+.compare li{margin-bottom:9px;} .compare li::marker{color:var(--gold);}
+ol.timeline{list-style:none; margin:0; padding:0; counter-reset:step; max-width:1250px;}
+ol.timeline li{position:relative; padding:2px 0 22px 56px; font-size:24px; line-height:1.45;}
+ol.timeline li::before{counter-increment:step; content:counter(step);
+  position:absolute; left:0; top:0; width:36px; height:36px; border:1px solid var(--gold); border-radius:50%;
+  color:var(--gold); display:flex; align-items:center; justify-content:center; font-size:17px; font-weight:700;}
+ol.timeline li i{display:block; font-style:normal; color:var(--ink-dim); font-size:19px; margin-top:4px;}
+.stats{display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:22px; margin-bottom:26px;}
+.stat{background:rgba(255,255,255,.045); border:1px solid var(--line); border-radius:14px; padding:26px; text-align:center;}
+.stat .num{font-family:Georgia,serif; font-size:52px; color:var(--gold); line-height:1;}
+.stat .lbl{font-size:20px; color:#ded3ba; margin-top:12px; line-height:1.4;}
+.code{font-family:'Cascadia Code',Consolas,'Courier New',monospace; background:#0b1526;
+  border:1px solid var(--line); border-radius:10px; padding:16px 20px; font-size:21px; color:#cfe0ff; margin-top:14px;}
+.note{border-left:4px solid var(--gold); background:rgba(212,169,78,.08);
+  padding:18px 24px; font-size:21px; line-height:1.5; border-radius:0 10px 10px 0; margin-top:24px;}
+.slide.title .kicker{font-size:21px; margin-bottom:22px;}
+.slide.title h1{font-family:Georgia,'Times New Roman',serif; font-size:72px; line-height:1.12;
+  color:#f4ead2; margin:0 0 26px; font-weight:400; max-width:1400px;}
+.slide.title .sub{font-size:26px; color:#cfc4a8; line-height:1.55; margin:0 0 34px;}
+.slide.title .author{font-size:20px; color:var(--gold-soft); letter-spacing:.06em;}
+.slide.title .hint{margin-top:52px; font-size:16px; color:var(--ink-dim); letter-spacing:.05em;}
+.slide.conclusion .note{font-size:22px;}
+</style>
+</head>
+<body>
+<a class='close' href='index.html' title='К списку лекций'>✕</a>
+<div id='stage'>
+<div class='modebar' id='modebar'>
+    <button data-mode='auto'>Авто</button>
+    <button data-mode='16:9'>16:9</button>
+    <button data-mode='4:3'>4:3</button>
+    <button data-mode='fill'>Заполнить</button>
+  </div>
+
+<section class='slide title active'>
+<div class='kicker'>ОПДПС · Организация и планирование деятельности предприятий сервиса</div>
+<h1>Лекция 7.<br>Заключительный урок</h1>
+<p class='sub'>Итоги курса · Повторение этапов продаж · Практикум по памятке туроператора: Таиланд · Итоговый тест</p>
+<div class='author'>По материалам Н. Ю. Гребенниковой и памятки PEGAS TOURISTIK (Таиланд, 2026)</div>
+<div class='hint'>Навигация: клавиши ← → · точки слева · 27 экранов</div>
+</section>
+
+<section class='slide'>
+<div class='kicker'>Лекция 7 · План</div>
+<h2>Что разберём на заключительном уроке</h2>
+<ol class='timeline'>
+<li>Итоги курса: что мы прошли за шесть лекций</li>
+<li>Памятка туроператора — рабочий инструмент менеджера<i>разбираем реальную памятку: Таиланд, PEGAS TOURISTIK</i></li>
+<li>Документы, TDAC, виза и граница</li>
+<li>Таможня: что можно ввозить и вывозить</li>
+<li>Аэропорт, отель, медицина и принимающая сторона</li>
+<li>Таиланд для продажи: страна, климат, курорты</li>
+<li>Повторение: шесть этапов продаж на сквозном примере</li>
+<li>Итоговый тест и вопросы для самопроверки</li>
+</ol>
+</section>
+
+<section class='slide'>
+<div class='kicker'>Лекция 7 · Итоги курса</div>
+<h2>Шесть лекций — одна профессия</h2>
+<div class='cards cols3'>
+<div class='card'><span class='term'>Л1 · Законодательная база</span><p>132-ФЗ, турист и турпродукт, туроператор и турагент, реестр, права туриста, «не подписал — не докажешь»</p></div>
+<div class='card'><span class='term'>Л2 · Технология обслуживания</span><p>CRM «САМО-турагент», словарь турагента, чтение авиабилета, лояльность, претензии и срок 20 дней</p></div>
+<div class='card'><span class='term'>Л3 · Техника продаж</span><p>Шесть этапов переговоров, 55/38/7, типология по Штейну, вопросы и слушание, возражения, сделка</p></div>
+<div class='card'><span class='term'>Л4 · Деловое общение</span><p>Культура общения и имидж, аттракция, техника замечания, управление персоналом, должностная инструкция</p></div>
+<div class='card'><span class='term'>Л5 · Внутренний туризм</span><p>Два Алтая, районы подбора, Белокуриха и Шерегеш, проверка тура до презентации</p></div>
+<div class='card'><span class='term'>Л6 · Международный туризм</span><p>Документы и аэропорт, чартер и регулярные рейсы, отель и медицина, Турция, сезонность, Таиланд</p></div>
+</div>
+<div class='note'>Сегодня связываем всё это в одну цепочку на реальном документе — памятке туроператора.</div>
+</section>
+
+<section class='slide'>
+<div class='kicker'>Лекция 7 · Памятка туроператора</div>
+<h2>Зачем менеджеру памятка туроператора</h2>
+<ul class='thesis'>
+<li>Первоисточник требований к поездке: документы, виза, таможня, страховка, контакты</li>
+<li>Основа инструктажа туриста перед вылетом — чек-лист уже готов, менеджеру не надо ничего придумывать<i>инструктаж — прямая обязанность агента (Л6)</i></li>
+<li>«Не подписал — не докажешь» (Л1): выдача памятки туристу фиксируется</li>
+<li>Ошибка в инструктаже = претензия «по предоставленной информации» — третий повод претензий (Л2)</li>
+</ul>
+<div class='note'>Сегодня разбираем реальную памятку: Таиланд, PEGAS TOURISTIK, сезон 2026.</div>
+</section>
+
+<section class='slide'>
+<div class='kicker'>Лекция 7 · Памятка туроператора</div>
+<h2>Что внутри памятки туриста</h2>
+<div class='cards cols4'>
+<div class='card'><span class='term'>Документы и TDAC</span><p>что проверить до вылета</p></div>
+<div class='card'><span class='term'>Виза и граница</span><p>безвизовый порядок и требования пограничников</p></div>
+<div class='card'><span class='term'>Таможня</span><p>ввоз, вывоз и запреты</p></div>
+<div class='card'><span class='term'>Вылет и прилёт</span><p>тайминги, биометрия, встреча</p></div>
+<div class='card'><span class='term'>Отель</span><p>расчётный час, депозит, сейф</p></div>
+<div class='card'><span class='term'>Медицина</span><p>страховка и порядок действий</p></div>
+<div class='card'><span class='term'>Страна</span><p>время, валюта, климат, обычаи</p></div>
+<div class='card'><span class='term'>Курорты и транспорт</span><p>пляжи, аренда, связь, контакты</p></div>
+</div>
+<div class='note'>Учебный разбор: суммы, курсы и правила всегда сверяются с актуальной памяткой ТО на дату поездки.</div>
+</section>
+
+<section class='slide'>
+<div class='kicker'>Лекция 7 · Памятка · Документы</div>
+<h2>Перед отъездом: проверяем документы</h2>
+<ul class='thesis'>
+<li>Загранпаспорт: срок действия — не менее 6 месяцев со дня начала тура<i>несовершеннолетний с 12 лет выезжает только по собственному загранпаспорту (документы, оформленные с марта 2010 года)</i></li>
+<li>Авиабилеты, страховые полисы, ваучеры — на каждого туриста</li>
+<li>Дети: согласие обоих родителей — если едут без родителей; свидетельство о рождении — если с одним из родителей</li>
+<li>Справка на вывоз наличной валюты (при необходимости); водительские права международного образца — для проката авто или мотоцикла<i>движение в Таиланде левостороннее</i></li>
+<li>Общегражданский паспорт РФ — пригодится при задержке рейса (например, для заселения в гостиницу)</li>
+</ul>
+</section>
+
+<section class='slide'>
+<div class='kicker'>Лекция 7 · Памятка · Новое требование</div>
+<h2>TDAC — электронная карта прибытия</h2>
+<ul class='thesis'>
+<li>С 1 мая 2025 года обязательна для всех, кто въезжает в Таиланд воздушным, наземным или морским транспортом</li>
+<li>Заполняется онлайн за 3 дня до прибытия, включая дату прибытия<i>ранее система форму не принимает — это ловушка для тех, кто заполняет «заранее»</i></li>
+<li>Адрес: tdac.immigration.go.th — есть руководство по заполнению на русском языке</li>
+<li>До 01.05.2025 действовала бумажная миграционная карта в самолёте<i>две части: левую хранят до выезда из Таиланда</i></li>
+</ul>
+<div class='note'>Менеджер включает TDAC в чек-лист инструктажа: турист без карты рискует не пройти границу.</div>
+</section>
+
+<section class='slide'>
+<div class='kicker'>Лекция 7 · Памятка · Виза</div>
+<h2>Виза и граница Таиланда</h2>
+<ul class='thesis'>
+<li>Безвизовый въезд — до 60 дней; повторно без визы — не ранее чем через 6 месяцев после выезда<i>иначе требуется виза в Консульстве Таиланда</i></li>
+<li>На границе предъявляют: загранпаспорт (≥ 6 месяцев действия), обратный билет, страховой полис, ваучер на проживание, заполненную TDAC</li>
+<li>По запросу пограничной службы: 700 $ наличными на человека либо снятие в банкомате аэропорта — 21 000 батов (40 000 батов на семью)</li>
+<li>В паспорт ставят штамп с датой въезда и окончания срока; продление — только в Иммиграционном департаменте<i>штраф за просрочку значительно превышает стоимость продления</i></li>
+</ul>
+</section>
+
+<section class='slide'>
+<div class='kicker'>Лекция 7 · Памятка · Таможня</div>
+<h2>Таможня: ввоз в Таиланд</h2>
+<div class='compare'>
+<div class='side'><h3>Разрешено</h3><ul>
+<li>Беспошлинно: 10 пачек сигарет или 250 г табака, 1 л алкоголя, личные вещи</li>
+<li>Фотоаппарат, видеокамера для личного пользования</li></ul></div>
+<div class='side'><h3>Запрещено и опасно</h3><ul>
+<li>Наркотики — за провоз предусмотрена смертная казнь; лекарства с наркотическими веществами; оружие</li>
+<li>Электронные сигареты и их аналоги — штраф 1 млн батов и/или до 10 лет тюрьмы<i>Посольство РФ: не ввозить, не хранить, не носить</i></li></ul></div>
+</div>
+<div class='note'>Видеотехника, телевизоры, ювелирные изделия и ценности указываются в декларации.</div>
+</section>
+
+<section class='slide'>
+<div class='kicker'>Лекция 7 · Памятка · Таможня</div>
+<h2>Таможня: что запрещено вывозить</h2>
+<div class='cards cols2'>
+<div class='card'><span class='term'>Старина и коллекции</span><p>предметы старины, антиквариат, почтовые марки — только с разрешения Департамента изящных искусств</p></div>
+<div class='card'><span class='term'>Ценности природы</span><p>золото в слитках, платина, необработанные драгоценные камни; изделия из слоновой кости и охраняемых животных</p></div>
+<div class='card'><span class='term'>Валюта и святыни</span><p>более 50 000 бат — по спецразрешению; изображения Будды — только в виде шейных медальонов</p></div>
+<div class='card'><span class='term'>Прочее</span><p>электроника и радиопередающие устройства, живые растения и животные, лекарства и химикалии — с разрешением</p></div>
+</div>
+<div class='note'>Медицинский сертификат о прививках не требуется; домашние животные — ветсертификат с прививкой от бешенства.</div>
+</section>
+
+<section class='slide'>
+<div class='kicker'>Лекция 7 · Памятка · Вылет</div>
+<h2>Вылет из России: сверяем с лекцией 6</h2>
+<div class='stats'>
+<div class='stat'><div class='num'>3 ч</div><div class='lbl'>начало регистрации на международный рейс</div></div>
+<div class='stat'><div class='num'>40 мин</div><div class='lbl'>конец регистрации до вылета по расписанию</div></div>
+<div class='stat'><div class='num'>20 мин</div><div class='lbl'>конец посадки в самолёт</div></div>
+</div>
+<ul class='thesis'>
+<li>Таможенная декларация: при вывозе менее 20 000 $ на человека и без декларируемых предметов не заполняется; иначе — указать всю валюту и хранить декларацию до возвращения в Россию</li>
+<li>Помним о норме бесплатного провоза багажа и доплатах за сверхнорматив; время в билетах — всегда местное</li>
+</ul>
+</section>
+
+<section class='slide'>
+<div class='kicker'>Лекция 7 · Памятка · Прилёт</div>
+<h2>По прилёте: биометрия и встреча</h2>
+<ul class='thesis'>
+<li>С 2022 года иммиграционная система использует биометрию на въезде и выезде для всех пассажиров, включая граждан РФ<i>отказ от биометрии = «невъездной пассажир» и депортация</i></li>
+<li>Паспортный контроль: паспорт, ваучер, обратный билет — под рукой</li>
+<li>Встреча PEGAS TOURISTIK: Пхукет — выход № 1, Бангкок — выход № 7<i>представитель проводит к трансферу и сообщает время информвстречи</i></li>
+<li>Информвстреча в отеле — важное мероприятие: регион, экскурсии, безопасность; в каждом отеле есть инфостенд принимающей стороны</li>
+<li>Время обратного трансфера уточняется дополнительно накануне даты вылета</li>
+</ul>
+<div class='note'>Отельный ваучер, авиабилеты туда и обратно и TDAC/миграционная карточка хранятся до вылета из Таиланда — власти проверяют их тщательно.</div>
+</section>
+
+<section class='slide'>
+<div class='kicker'>Лекция 7 · Памятка · Отель</div>
+<h2>Отель: заселение и выезд</h2>
+<div class='compare'>
+<div class='side'><h3>Заселение</h3><ul>
+<li>Расчётный час — 12:00; расселение в день приезда — после 14:00</li>
+<li>Во многих отелях берут депозит — возвращается при выезде</li>
+<li>Распределение номеров — прерогатива администрации отеля</li>
+<li>Деньги и документы — только в сейф; при утрате — представитель принимающей стороны и полицейский рапорт</li></ul></div>
+<div class='side'><h3>Выезд</h3><ul>
+<li>Освободить номер до 12:00, ключи — на стойку</li>
+<li>Оплатить допуслуги: мини-бар, телефон, питание в номер, массаж</li>
+<li>Багаж — в камеру хранения, на территории можно ждать автобус</li>
+<li>Не сдал номер до 12:00 — сутки за свой счёт</li></ul></div>
+</div>
+</section>
+
+<section class='slide'>
+<div class='kicker'>Лекция 7 · Памятка · Контакты</div>
+<h2>Принимающая сторона: где гид, а где нет</h2>
+<div class='compare'>
+<div class='side'><h3>Гид на месте</h3><ul>
+<li>Као Лак — гид ежедневно курирует туристов в отелях региона</li>
+<li>Связь: телефон на ваучере Pegas Touristik и в инфопапке отеля</li></ul></div>
+<div class='side'><h3>Гидов нет</h3><ul>
+<li>Краби, Самуи и Ко Чанг — услуги гидов не предоставляются</li>
+<li>Все вопросы — через call-центр и представителей</li></ul></div>
+</div>
+<div class='cards cols2'>
+<div class='card'><span class='term'>Представители в Таиланде</span><p>Бангкок / Паттайя / Самет / Ко Чанг: +66 82-087-2891 · Пхукет / Као Лак / Краби / Самуи: +66 89-922-3704</p></div>
+<div class='card'><span class='term'>Поддержка туристов</span><p>09:00–21:00 мск: +7 (495) 287-87-87, доб. 2 · +7 (800) 700-87-47, доб. 2 (бесплатно из России)</p></div>
+</div>
+</section>
+
+<section class='slide'>
+<div class='kicker'>Лекция 7 · Памятка · Медицина</div>
+<h2>Медицина: как работает страховка</h2>
+<ul class='thesis'>
+<li>Бесплатная помощь — только через страховую компанию: первым делом звонок в центр неотложной помощи по телефонам из полиса<i>ассистанс принимает также по WhatsApp и Viber</i></li>
+<li>Полис активируется при безусловной франшизе 30 $ и наличии оригиналов паспорта и полиса</li>
+<li>Обращение в клинику без направления страховой — турист оплачивает сам</li>
+<li>Покрытие, как правило: несчастные случаи и внезапные заболевания<i>хронические болезни и беременность обычно не покрываются — лечимся за свой счёт</i></li>
+<li>До поездки — консультация с лечащим врачом, чтобы не допустить обострения</li>
+</ul>
+<div class='note'>Тот же порядок, что в Л6, — памятка туроператора лишь конкретизирует его под страну.</div>
+</section>
+
+<section class='slide'>
+<div class='kicker'>Лекция 7 · Таиланд</div>
+<h2>Страна за 60 секунд</h2>
+<div class='two-col'>
+<ul class='thesis'>
+<li>Время: +4 часа к Москве, часовой пояс UTC+7</li>
+<li>Площадь 513 тыс. км² — примерно как Франция; столица — Бангкок</li>
+<li>Население около 60,6 млн человек, 75% — тайцы</li>
+<li>Язык — тайский; в туристических центрах говорят по-английски</li>
+<li>Валюта — бат; по данным памятки 1 $ ≈ 34 бата<i>обмен в банках (9:00–15:00) по загранпаспорту; курс в отелях ниже</i></li>
+</ul>
+<figure class='shot'>
+<img src='https://commons.wikimedia.org/wiki/Special:FilePath/Longtail%20boats%20at%20Ao%20Nang%20beach%20%2812360044894%29.jpg?width=1200' alt='Лонгтейл-лодки на пляже Ао-Нанг, Краби' onerror="this.closest('figure').classList.add('img-fail')">
+<figcaption>Лонгтейлы, Ао-Нанг (Краби). Фото: Wikimedia Commons</figcaption>
+</figure>
+</div>
+</section>
+
+<section class='slide'>
+<div class='kicker'>Лекция 7 · Таиланд</div>
+<h2>Климат: когда продавать Таиланд</h2>
+<div class='cards cols3'>
+<div class='card'><span class='term'>Ноябрь — февраль</span><p>«зима», около 29° — лучший сезон: пляж и экскурсии по храмам</p></div>
+<div class='card'><span class='term'>Март — май</span><p>лето, 30–35° и тёплые тропические ночи</p></div>
+<div class='card'><span class='term'>Май — август</span><p>настоящая жара, около 40°, осадков почти нет</p></div>
+<div class='card'><span class='term'>Сентябрь — октябрь</span><p>сезон дождей</p></div>
+<div class='card'><span class='term'>Круглый год</span><p>средняя температура около тридцати градусов</p></div>
+<div class='card'><span class='term'>Для продажи</span><p>сверяем запрос туриста с сезоном: «зима» — комфортно всем, жара — для тех, кто её просил</p></div>
+</div>
+</section>
+
+<section class='slide'>
+<div class='kicker'>Лекция 7 · Курорты</div>
+<h2>Паттайя глазами менеджера</h2>
+<div class='cards cols2'>
+<div class='card'><span class='term'>Центр</span><p>тусовка и шопинг: Walking Street, Лотус, Big C, ночной рынок Лукдот; купаться грязно — илистое дно и пристань</p></div>
+<div class='card'><span class='term'>Джомтьен</span><p>реконструированный пляж и набережная; рядом 7-Eleven, аптеки, ночные рынки</p></div>
+<div class='card'><span class='term'>Вонг Амат (север)</span><p>чисто и красиво, отели первой линии — Pullman, Long Beach, Grand Mirage; ходит тук-тук</p></div>
+<div class='card'><span class='term'>НаДжомтьен</span><p>дальний тихий район: чистые пляжи, отели «всё на территории», транспорт почти не ходит</p></div>
+<div class='card'><span class='term'>Остров Ко Лан</span><p>живописная природа и чистые пляжи — лодки и паромы от пристани в центре Паттайи</p></div>
+<div class='card'><span class='term'>Развлечения</span><p>шоу «Альказар», тайский массаж, парк-отель с американскими горками, тарзанкой и вращающимся рестораном</p></div>
+</div>
+</section>
+
+<section class='slide'>
+<div class='kicker'>Лекция 7 · Курорты</div>
+<h2>Пхукет глазами менеджера</h2>
+<div class='two-col'>
+<ul class='thesis'>
+<li>Остров соединён с материком дамбой; рейсового транспорта нет — такси и тук-тук, дороже Паттайи</li>
+<li>Ката и Карон — лучшие пляжи: Ката — чистое море и золотистый песок; Карон — «поющие пески», бывают волны и обратное течение<i>неумеющим плавать — не заплывать далеко</i></li>
+<li>Патонг — центр вечерней жизни (Бангла-роуд), море хуже; Майкао — аквапарк и вид на самолёты у аэропорта; Банг Тао — элитная Лагуна и заповедник</li>
+<li>Широкая пляжная полоса, лежаки платные, работает новый аквапарк</li>
+<li>С 1 ноября 2017 года курение на пляжах Таиланда запрещено — штраф до 100 000 бат</li>
+</ul>
+<figure class='shot'>
+<img src='https://commons.wikimedia.org/wiki/Special:FilePath/KATA%20BEACH%201.jpg?width=1200' alt='Пляж Ката, Пхукет' onerror="this.closest('figure').classList.add('img-fail')">
+<figcaption>Пляж Ката, Пхукет. Фото: Wikimedia Commons</figcaption>
+</figure>
+</div>
+</section>
+
+<section class='slide'>
+<div class='kicker'>Лекция 7 · Памятка · Транспорт</div>
+<h2>Транспорт и аренда: что предупредить туриста</h2>
+<ul class='thesis'>
+<li>Левостороннее движение; дороги напряжённые, в Бангкоке — серьёзные пробки</li>
+<li>Автобусы ГТК трёх классов: оранжевые (1 класс) — по требованию и медленно; синие с кондиционером — крупные пункты; VIP — меньше мест, больше комфорта</li>
+<li>Аренда авто: от 23 лет и стаж от 3 лет; МВУ + паспорт + кредитная карта (депозит 320–640 $)<i>с национальными правами — штраф при проверке</i></li>
+<li>Байк: 15–32 $ в сутки, залог до 100 $; осмотреть и сфотографировать до поездки</li>
+<li>Бензин двух видов: бензин и газохол (с 10–20% этанола)</li>
+</ul>
+</section>
+
+<section class='slide'>
+<div class='kicker'>Лекция 7 · Памятка · Культура</div>
+<h2>Обычаи: что рассказать туристу до вылета</h2>
+<ul class='thesis'>
+<li>Королевскую семью не обсуждают и не критикуют — тайцы этого не терпят</li>
+<li>Сдержанность: открытое проявление гнева — грубость; публичная демонстрация чувств не принята</li>
+<li>В храмы и частные дома — снимать обувь; в святыни — в закрытой одежде</li>
+<li>Каждый образ Будды священен — не взбираться ради фото; указывать на человека или предмет ногой — грубость</li>
+<li>Фото разрешено почти везде: исключения — Королевский дворец, храмы, закрытые павильоны музеев; в магазинах и бутиках снимать нельзя</li>
+</ul>
+<div class='note'>Такой инструктаж снижает конфликты на месте — и защищает репутацию агентства.</div>
+</section>
+
+<section class='slide'>
+<div class='kicker'>Лекция 7 · Практикум</div>
+<h2>Практикум: отвечаем по памятке</h2>
+<div class='cards cols2'>
+<div class='card'><span class='term'>1 · «Вейп можно взять?»</span><p>Нет: ввоз электронных сигарет запрещён — штраф 1 млн батов и/или до 10 лет; предупреждаем письменно</p></div>
+<div class='card'><span class='term'>2 · «Были в феврале, летим в августе»</span><p>Безвиз — раз в полгода: повторный въезд раньше срока только по визе из Консульства Таиланда</p></div>
+<div class='card'><span class='term'>3 · «Мама с ребёнком 11 лет»</span><p>Ребёнку — собственный загранпаспорт; взять свидетельство о рождении; проверить TDAC на ребёнка</p></div>
+<div class='card'><span class='term'>4 · «Когда заполнять TDAC?»</span><p>За 3 дня до прибытия, включая дату прибытия; раньше система не примет форму</p></div>
+</div>
+<div class='note'>Ответ менеджера должен опираться на памятку и официальные источники — и фиксируйтесь в CRM.</div>
+</section>
+
+<section class='slide'>
+<div class='kicker'>Лекция 7 · Повторение · Лекция 3</div>
+<h2>Шесть этапов продаж — вспоминаем</h2>
+<ol class='timeline'>
+<li>Подготовка<i>продукт — клиент — конкурент; цель, план, позитивный настрой</i></li>
+<li>Вступление в контакт<i>около минуты; 55/38/7; улыбка, имя, комплимент</i></li>
+<li>Выявление потребностей<i>20% говорим / 80% слушаем; открытые → альтернативные → закрытые</i></li>
+<li>Презентация<i>ценность до цены; свойство → преимущество → выгода; три варианта</i></li>
+<li>Возражения<i>запрос информации; шесть шагов; ценовые техники — «бутерброд», деление, сравнение</i></li>
+<li>Заключение сделки<i>задача-максимум и минимум; фиксация результатов и следующего шага</i></li>
+</ol>
+</section>
+
+<section class='slide'>
+<div class='kicker'>Лекция 7 · Повторение</div>
+<h2>Один звонок — от контакта до памятки</h2>
+<ol class='timeline'>
+<li>Звонок<i>приветствие: агентство, регион, имя; цель — пригласить в офис</i></li>
+<li>В офисе: потребности<i>«Какой отдых представляете?» — Таиланд, ноябрь, семья, бюджет</i></li>
+<li>Презентация<i>ноябрь — начало «зимнего» сезона; три варианта: Паттайя, Пхукет, Самуи</i></li>
+<li>Возражение «дорого»<i>деление цены на дни, сравнение с альтернативой, таблица выгод</i></li>
+<li>Сделка<i>договор, оплата, документы: ваучер, билеты, страховой полис</i></li>
+<li>Инструктаж по памятке<i>TDAC за 3 дня, тайминги аэропорта, документы ребёнка, контакты представителя — и всё в CRM</i></li>
+</ol>
+</section>
+
+<section class='slide'>
+<div class='kicker'>Лекция 7 · Итоговый тест</div>
+<h2>Итоговый тест (срез): как он устроен</h2>
+<div class='stats'>
+<div class='stat'><div class='num'>5</div><div class='lbl'>блоков заданий</div></div>
+<div class='stat'><div class='num'>100</div><div class='lbl'>баллов — по 20 на блок</div></div>
+<div class='stat'><div class='num'>60</div><div class='lbl'>минут на работу</div></div>
+</div>
+<div class='cards cols2'>
+<div class='card'><span class='term'>Формат</span><p>письменно в аудитории, два варианта, телефонам и конспектам — нет</p></div>
+<div class='card'><span class='term'>Блоки</span><p>А «Азбука» без вариантов → Б выбор ответа → В соответствия → Г ситуации → Д практика</p></div>
+</div>
+<div class='note'>Готовиться: словарь Л2, этапы продаж Л3, слайды «Что запомнить» всех лекций и сегодняшняя памятка.</div>
+</section>
+
+<section class='slide'>
+<div class='kicker'>Лекция 7 · Самопроверка</div>
+<h2>Вопросы для самопроверки по всему курсу</h2>
+<ol class='timeline'>
+<li>Что проверяют в Едином федеральном реестре перед работой с туроператором?</li>
+<li>Расшифруйте SGL, DBL, TWIN, RO, BB, HB, FB, ALL, UALL и найдите ошибку в заявке DBL+2CHD(2–6)</li>
+<li>Назовите шесть этапов продаж и приёмы активного слушания</li>
+<li>Как построить замечание сотруднику? Какие пять приёмов создают аттракцию?</li>
+<li>Из каких разделов состоит должностная инструкция менеджера? Какие отчёты он сдаёт?</li>
+<li>Что входит в инструктаж туриста перед международным вылетом?</li>
+<li>Что изменилось в правилах въезда в Таиланд с 1 мая 2025 года?</li>
+</ol>
+</section>
+
+<section class='slide conclusion'>
+<div class='kicker'>Лекция 7 · Итоги</div>
+<h2>Что запомнить</h2>
+<ul class='thesis'>
+<li>Памятка туроператора — рабочий инструмент: из неё рождается чек-лист инструктажа туриста</li>
+<li>Таиланд 2026: TDAC за 3 дня до прибытия, безвиз 60 дней раз в полгода, биометрия на границе, строгая таможня</li>
+<li>Документы детей и согласия проверяем заранее; тайминги аэропорта — 3 часа / 40 минут / 20 минут</li>
+<li>Медицина — только через ассистанса; контакты представителей — в памятку туриста</li>
+<li>Курс пройден: право → CRM и словарь → продажи → общение и персонал → внутренний и международный туризм</li>
+</ul>
+<div class='note'>Практика: ролевая игра «инструктаж по памятке» · итоговый тест. Успехов на срезе!</div>
+</section>
+
+<div class='rail'>
+<div class='vlabel'>ОПДПС · Лекция 07</div>
+<div class='dots' id='dots'></div>
+</div>
+
+<div class='nav'>
+<div class='count' id='count'>1 / 27</div>
+<button id='prev'>◀ Назад</button>
+<button id='next'>Вперёд ▶</button>
+</div>
+
+</div>
+
+<script>
+(function(){
+  var stage = document.getElementById('stage');
+  var slides = Array.prototype.slice.call(document.querySelectorAll('.slide'));
+  var dotsBox = document.getElementById('dots');
+  var countEl = document.getElementById('count');
+  var prevBtn = document.getElementById('prev');
+  var nextBtn = document.getElementById('next');
+  var modeKey = 'opdps-stage-mode';
+  var currentMode = localStorage.getItem(modeKey) || 'auto';
+  var idx = 0;
+
+  slides.forEach(function(s, i){
+    var d = document.createElement('button');
+    d.className = 'dot';
+    d.title = 'Экран ' + (i+1);
+    d.addEventListener('click', function(){ show(i); });
+    dotsBox.appendChild(d);
+  });
+  var dots = Array.prototype.slice.call(dotsBox.children);
+
+  function boxFor(mode){
+    if(mode === '16:9') return {w:1920, h:1080};
+    if(mode === '4:3')  return {w:1440, h:1080};
+    if(mode === 'fill') return null;
+    var ar = window.innerWidth / window.innerHeight;
+    return ar < 1.5 ? {w:1440, h:1080} : {w:1920, h:1080};
+  }
+  function apply(){
+    if(currentMode === 'fill'){
+      stage.style.width = '1920px';
+      stage.style.height = '1080px';
+      var sx = window.innerWidth / 1920, sy = window.innerHeight / 1080;
+      stage.style.transform = 'translate(-50%,-50%) scale(' + sx + ',' + sy + ')';
+      return;
+    }
+    var box = boxFor(currentMode);
+    stage.style.width = box.w + 'px';
+    stage.style.height = box.h + 'px';
+    var k = Math.min(window.innerWidth / box.w, window.innerHeight / box.h);
+    stage.style.transform = 'translate(-50%,-50%) scale(' + k + ')';
+  }
+  function setMode(m){
+    currentMode = m;
+    localStorage.setItem(modeKey, m);
+    Array.prototype.forEach.call(document.querySelectorAll('#modebar button'), function(b){
+      b.classList.toggle('on', b.getAttribute('data-mode') === m);
+    });
+    apply();
+  }
+  Array.prototype.forEach.call(document.querySelectorAll('#modebar button'), function(b){
+    b.addEventListener('click', function(){ setMode(b.getAttribute('data-mode')); });
+  });
+
+  function show(i){
+    if(i < 0) i = 0;
+    if(i > slides.length - 1) i = slides.length - 1;
+    slides[idx].classList.remove('active');
+    dots[idx].classList.remove('active');
+    idx = i;
+    slides[idx].classList.add('active');
+    dots[idx].classList.add('active');
+    countEl.textContent = (idx + 1) + ' / ' + slides.length;
+    prevBtn.disabled = idx === 0;
+    nextBtn.disabled = idx === slides.length - 1;
+  }
+  prevBtn.addEventListener('click', function(){ show(idx - 1); });
+  nextBtn.addEventListener('click', function(){ show(idx + 1); });
+  document.addEventListener('keydown', function(e){
+    if(e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === 'PageDown' || e.key === ' ') show(idx + 1);
+    if(e.key === 'ArrowLeft' || e.key === 'ArrowUp' || e.key === 'PageUp') show(idx - 1);
+    if(e.key === 'Home') show(0);
+    if(e.key === 'End') show(slides.length - 1);
+  });
+  window.addEventListener('resize', apply);
+
+  setMode(currentMode);
+  show(0);
+})();
+</script>
+</body>
+</html>
